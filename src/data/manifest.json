@@ -1,0 +1,9 @@
+[
+  {
+    "id": "sample",
+    "label": "Sample comments",
+    "description": "테스트용 가짜 영화 코멘트 데이터셋",
+    "itemCount": 6,
+    "path": "src/data/users/sample.json"
+  }
+]

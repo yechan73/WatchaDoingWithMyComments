@@ -9,8 +9,9 @@ interface QuizCardProps {
 }
 
 export function QuizCard({ item, difficulty, revealed }: QuizCardProps) {
-  const showYear = difficulty === "easy";
-  const showDirector = difficulty !== "hard";
+  const showRating = difficulty !== "hard";
+  const showDirector = difficulty === "easy";
+  const hasHints = showRating || showDirector;
 
   return (
     <section className="quiz-card" aria-label="문제 카드">
@@ -18,24 +19,22 @@ export function QuizCard({ item, difficulty, revealed }: QuizCardProps) {
         {!revealed ? (
           <>
             <p className="quiz-card__quote">“{item.comment}”</p>
-            <dl className="quiz-card__hints">
-              <div>
-                <dt>내 평점</dt>
-                <dd>{formatRatingStars(item.ratingStars)}</dd>
-              </div>
-              {showDirector ? (
-                <div>
-                  <dt>감독</dt>
-                  <dd>{item.directorNames.join(", ") || "힌트 없음"}</dd>
-                </div>
-              ) : null}
-              {showYear ? (
-                <div>
-                  <dt>개봉연도</dt>
-                  <dd>{item.year ?? "힌트 없음"}</dd>
-                </div>
-              ) : null}
-            </dl>
+            {hasHints ? (
+              <dl className="quiz-card__hints">
+                {showRating ? (
+                  <div>
+                    <dt>내 평점</dt>
+                    <dd>{formatRatingStars(item.ratingStars)}</dd>
+                  </div>
+                ) : null}
+                {showDirector ? (
+                  <div>
+                    <dt>감독</dt>
+                    <dd>{item.directorNames.join(", ") || "힌트 없음"}</dd>
+                  </div>
+                ) : null}
+              </dl>
+            ) : null}
           </>
         ) : (
           <div className="quiz-card__poster" aria-hidden="true">

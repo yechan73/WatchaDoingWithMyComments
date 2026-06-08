@@ -1,7 +1,8 @@
 import { QuizGame } from "@/components/quiz/QuizGame";
-import sampleItems from "@/data/users/sample.json";
-import type { QuizItem } from "@/features/quiz/quiz-types";
+import { loadQuizDatasets } from "@/data/load-datasets";
 
-export default function Home() {
-  return <QuizGame items={sampleItems as QuizItem[]} />;
+export default async function Home() {
+  const datasets = await loadQuizDatasets();
+
+  return <QuizGame datasets={datasets} />;
 }

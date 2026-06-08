@@ -2,7 +2,7 @@
 
 Personal web quiz game based on locally prepared Watcha Pedia comment data.
 
-This repository is currently in the documentation/repo-preparation phase. Do not implement crawler, login, API bypass, or live Watcha API collection features.
+The repository currently contains a working sample quiz app, answer matching logic, tests, and a local JSON normalization script. Do not implement crawler, login, API bypass, or live Watcha API collection features.
 
 ## Project Intent
 
@@ -20,7 +20,36 @@ This repository is currently in the documentation/repo-preparation phase. Do not
 
 - [SWRS](docs/SWRS.md): software/work requirements specification.
 - [Data Policy](docs/DATA_POLICY.md): data handling, privacy, and allowed/disallowed data.
+- [Dataset Guide](docs/DATASET_GUIDE.md): safe manual dataset preparation flow.
 - [Development Plan](docs/DEVELOPMENT_PLAN.md): phase-based implementation plan.
+- [Planning](docs/PLANNING.md): current implementation status and remaining work.
+
+## Local Commands
+
+```bash
+npm run dev
+npm test
+npm run lint
+npm run build
+```
+
+## Normalize Local Data
+
+The normalization script reads only local JSON files and writes normalized `QuizItem[]` data.
+
+```bash
+npm run normalize:data -- --input data-raw/comments.json --output src/data/users/my-comments.json
+```
+
+Supported input shapes:
+
+- A single Watcha-like response object.
+- An array of Watcha-like page response objects.
+- An array already cut down to raw comment objects.
+
+After writing a normalized JSON file under `src/data/users/`, restart the dev
+server or rebuild the app. Local dataset files appear in the home screen dataset
+dropdown.
 
 ## Recommended Stack
 

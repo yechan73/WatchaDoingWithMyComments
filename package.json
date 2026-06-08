@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
-    "test": "vitest run"
+    "test": "vitest run",
+    "normalize:data": "node --experimental-strip-types scripts/normalize-watcha-comments.ts"
   },
   "dependencies": {
     "framer-motion": "latest",

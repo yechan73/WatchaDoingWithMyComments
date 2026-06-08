@@ -8,10 +8,10 @@ import { QuizCard } from "./QuizCard";
 import { ScoreBoard } from "./ScoreBoard";
 import { matchAnswer, type AnswerMatchResult } from "@/features/quiz/answer-matcher";
 import { createQuizSession } from "@/features/quiz/quiz-engine";
-import type { Difficulty, QuestionCount, QuizAttempt, QuizItem } from "@/features/quiz/quiz-types";
+import type { Difficulty, QuestionCount, QuizAttempt, QuizDataset, QuizItem } from "@/features/quiz/quiz-types";
 
 interface QuizGameProps {
-  items: QuizItem[];
+  datasets: QuizDataset[];
 }
 
 const questionCountOptions: QuestionCount[] = [5, 10, 20, "all"];
@@ -20,8 +20,10 @@ const difficulties: Array<{ value: Difficulty; label: string }> = [
   { value: "normal", label: "보통" },
   { value: "hard", label: "어려움" },
 ];
+const emptyItems: QuizItem[] = [];
 
-export function QuizGame({ items }: QuizGameProps) {
+export function QuizGame({ datasets }: QuizGameProps) {
+  const [selectedDatasetId, setSelectedDatasetId] = useState(datasets[0]?.id ?? "");
   const [questionCount, setQuestionCount] = useState<QuestionCount>(5);
   const [difficulty, setDifficulty] = useState<Difficulty>("normal");
   const [quizItems, setQuizItems] = useState<QuizItem[]>([]);
@@ -31,9 +33,21 @@ export function QuizGame({ items }: QuizGameProps) {
   const [lastResult, setLastResult] = useState<AnswerMatchResult | null>(null);
   const [finished, setFinished] = useState(false);
 
+  const selectedDataset = datasets.find((dataset) => dataset.id === selectedDatasetId) ?? datasets[0];
+  const items = selectedDataset?.items ?? emptyItems;
   const currentItem = quizItems[currentIndex];
   const selectedCountLabel = questionCount === "all" ? "전체" : `${questionCount}문제`;
   const playableCount = useMemo(() => items.filter((item) => item.comment && item.answerTitle).length, [items]);
+
+  function selectDataset(datasetId: string) {
+    setSelectedDatasetId(datasetId);
+    setQuizItems([]);
+    setAttempts([]);
+    setCurrentIndex(0);
+    setAnswer("");
+    setLastResult(null);
+    setFinished(false);
+  }
 
   function startGame() {
     const session = createQuizSession(items, questionCount);
@@ -81,14 +95,24 @@ export function QuizGame({ items }: QuizGameProps) {
     return (
       <main className="home-screen">
         <section className="setup-panel" aria-labelledby="app-title">
-          <p className="eyebrow">Sample dataset · {playableCount} comments</p>
+          <p className="eyebrow">
+            {selectedDataset?.label ?? "No dataset"} · {playableCount} comments
+          </p>
           <h1 id="app-title">Watcha Doing with My Comments</h1>
-          <p className="setup-panel__copy">내가 쓴 한줄평만 보고 영화를 맞춰보세요.</p>
+          <p className="setup-panel__copy">{selectedDataset?.description ?? "내가 쓴 한줄평만 보고 영화를 맞춰보세요."}</p>
           <div className="control-grid">
             <label>
               데이터셋
-              <select value="sample" disabled>
-                <option value="sample">Sample comments</option>
+              <select value={selectedDataset?.id ?? ""} onChange={(event) => selectDataset(event.target.value)}>
+                {datasets.length > 0 ? (
+                  datasets.map((dataset) => (
+                    <option key={dataset.id} value={dataset.id}>
+                      {dataset.label}
+                    </option>
+                  ))
+                ) : (
+                  <option value="">No datasets</option>
+                )}
               </select>
             </label>
             <label>

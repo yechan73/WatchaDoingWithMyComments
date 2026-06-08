@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { extractRawComments, normalizeWatchaComments } from "../scripts/normalize-watcha-comments";
+import { extractRawComments, normalizeWatchaComments, parseDatasetInput } from "../scripts/normalize-watcha-comments";
 
 const firstComment = {
   code: "comment-1",
@@ -62,6 +62,12 @@ describe("extractRawComments", () => {
 
   it("keeps arrays already cut down to raw comments", () => {
     expect(extractRawComments([firstComment, secondComment])).toEqual([firstComment, secondComment]);
+  });
+});
+
+describe("parseDatasetInput", () => {
+  it("explains when the input is rendered HTML instead of JSON", () => {
+    expect(() => parseDatasetInput('<ul class="comments"><li>Not JSON</li></ul>')).toThrow(/looks like HTML/u);
   });
 });
 

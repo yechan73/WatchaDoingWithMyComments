@@ -27,7 +27,8 @@ share it with you.
 6. Look for a JSON response that contains comment objects with fields such as
    `text`, `content.title`, `content.year`, `content.poster`,
    `content.director_names`, and `user_content_action.rating`.
-7. Copy only the response body JSON.
+7. Copy only the response body JSON. The file should start with `{` or `[`, not
+   with HTML tags such as `<ul>`, `<li>`, or `<html>`.
 8. Save it as a local file such as:
 
 ```text
@@ -36,6 +37,9 @@ data-raw/my-comments.json
 
 Do not save request headers, cookies, session tokens, HAR files, or any browser
 authentication data into the repository.
+
+Do not copy from the Elements panel. Rendered page markup is HTML, and the local
+normalization script expects JSON.
 
 ## Normalize The File
 

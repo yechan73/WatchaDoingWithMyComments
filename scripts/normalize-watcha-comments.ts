@@ -17,6 +17,23 @@ interface CliOptions extends NormalizeOptions {
 type JsonObject = Record<string, unknown>;
 type WatchaPoster = NonNullable<NonNullable<WatchaRawComment["content"]>["poster"]>;
 
+export function parseDatasetInput(raw: string): unknown {
+  const trimmed = raw.trimStart();
+
+  if (trimmed.startsWith("<")) {
+    throw new Error(
+      "Input looks like HTML, not JSON. Copy the Network response body JSON, not the Elements panel markup or rendered page HTML.",
+    );
+  }
+
+  try {
+    return JSON.parse(raw) as unknown;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown parse error";
+    throw new Error(`Input is not valid JSON. ${message}`);
+  }
+}
+
 export function normalizeWatchaComments(input: unknown, options: NormalizeOptions = {}): QuizItem[] {
   const rawComments = extractRawComments(input);
   const seen = new Set<string>();
@@ -203,7 +220,7 @@ Options:
 
 async function main() {
   const options = parseCliOptions(process.argv.slice(2));
-  const input = JSON.parse(await readFile(options.inputPath, "utf8"));
+  const input = parseDatasetInput(await readFile(options.inputPath, "utf8"));
   const items = normalizeWatchaComments(input, options);
 
   await mkdir(dirname(options.outputPath), { recursive: true });

@@ -30,11 +30,22 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 .setup-panel, .quiz-shell, .result-panel { width: min(100%, 46rem); }
 .setup-panel h1, .result-panel h1 { max-width: 13ch; margin: 0; font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: 0.95; letter-spacing: 0; }
 .setup-panel__copy { max-width: 32rem; margin: 1.5rem 0 2rem; color: var(--muted); font-size: 1.1rem; line-height: 1.7; }
+.setup-panel__notice { max-width: 32rem; margin: 0.85rem 0 0; color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
 .eyebrow { margin: 0 0 0.8rem; color: var(--accent-strong); font-size: 0.78rem; font-weight: 700; letter-spacing: 0; text-transform: uppercase; }
 .control-grid { display: grid; gap: 0.85rem; margin-bottom: 1.25rem; }
 .control-grid label, .answer-form label { display: grid; gap: 0.45rem; color: var(--muted); font-size: 0.9rem; font-weight: 700; }
+.field-label { display: inline-flex; align-items: center; gap: 0.4rem; }
+.help-button, .icon-button { display: inline-grid; min-width: 2rem; min-height: 2rem; place-items: center; border: 1px solid var(--line); background: var(--surface-strong); color: var(--text); padding: 0; }
+.help-button { border-radius: 999px; color: var(--accent-strong); }
 select, input { width: 100%; min-height: 3rem; border: 1px solid var(--line); border-radius: 0.5rem; background: var(--surface); color: var(--text); padding: 0 0.95rem; }
 .primary-action, .answer-reveal button, .result-panel button { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--accent); color: white; font-weight: 800; padding: 0 1.1rem; }
+.modal-backdrop { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; background: rgba(0, 0, 0, 0.72); padding: 1rem; }
+.modal-panel { width: min(100%, 38rem); max-height: min(42rem, calc(100vh - 2rem)); overflow: auto; overflow-wrap: anywhere; border: 1px solid var(--line); border-radius: 0.5rem; background: var(--surface); box-shadow: 0 1.5rem 5rem rgba(0, 0, 0, 0.45); padding: 1.1rem; }
+.modal-panel__header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+.modal-panel__header h2 { margin: 0; font-size: 1.2rem; letter-spacing: 0; }
+.dataset-help-list { display: grid; gap: 0.75rem; margin: 0; padding-left: 1.3rem; color: var(--muted); line-height: 1.55; }
+.dataset-help-list li::marker { color: var(--accent-strong); font-weight: 800; }
+.modal-panel__note { margin: 1rem 0 0; color: var(--accent-strong); font-size: 0.9rem; font-weight: 700; }
 .quiz-shell { display: grid; gap: 1rem; }
 .quiz-header { display: flex; align-items: center; justify-content: space-between; }
 .quiz-header strong { color: var(--muted); }

@@ -14,6 +14,8 @@ The repository is beyond the original documentation-only phase. It already has:
 - A static sample dataset at `src/data/users/sample.json`.
 - A dataset manifest at `src/data/manifest.json`.
 - Dataset files under `src/data/users/` are loaded into the home screen dropdown.
+- The dataset dropdown has an in-app help dialog explaining the local data preparation flow.
+- Dataset loading filters invalid items and reports excluded item counts on the setup screen.
 - Core quiz types, quiz session creation, shuffle, rating formatting, and answer matching.
 - Basic quiz UI: setup screen, question card, answer input, reveal, next question, and result screen.
 - Unit tests for quiz generation and answer matching.
@@ -41,7 +43,7 @@ Latest local verification:
 | --- | --- | --- |
 | Phase 0. Documentation and repo preparation | Mostly done | Docs and ignore rules exist. README is outdated because it still says the repo is in documentation/repo-preparation phase. |
 | Phase 1. Next.js project creation | Done | App builds successfully. |
-| Phase 2. Sample data connection | Done for MVP | Local JSON dataset files are loaded into the home screen dropdown. |
+| Phase 2. Sample data connection | Done for MVP | Local JSON dataset files are loaded into the home screen dropdown with help and invalid-item handling. |
 | Phase 3. Quiz engine | Done for MVP | Session creation, shuffling, count limiting, and tests exist. |
 | Phase 4. Answer matching | Done for MVP | Normalization, Levenshtein similarity, aliases, and tests exist. More Korean punctuation cases can be added later. |
 | Phase 5. Quiz UI | Mostly done | End-to-end sample quiz flow exists. Sample app behavior has been checked. Accessibility pass remains. |
@@ -88,9 +90,9 @@ Goal: support more than one local dataset cleanly.
 
 Tasks:
 
-- Add stronger validation for dataset shape before gameplay.
+- Add richer validation errors for dataset shape before gameplay.
 - Decide whether `itemCount` should be manually maintained, derived at load time, or updated by a script.
-- Add user-facing handling for empty or invalid datasets.
+- Add a small fixture or story for an intentionally invalid dataset during local QA.
 
 Acceptance:
 
@@ -155,7 +157,7 @@ Acceptance:
 
 1. Run the normalization script against a small real local dataset.
 2. Confirm the generated dataset appears in the dropdown and plays end to end.
-3. Add stronger dataset validation and invalid-data UI.
+3. Add richer validation messages and a local invalid-dataset QA fixture.
 4. Do one accessibility and mobile QA pass on the quiz UI.
 
 This order keeps the project aligned with its main promise: a personal quiz game

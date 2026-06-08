@@ -26,13 +26,15 @@ async function loadDataset(fileName: string, manifest: DatasetManifestEntry[]): 
   const manifestEntry = findManifestEntry(id, fileName, manifest);
   const raw = await readFile(join(dataDirectory, fileName), "utf8");
   const parsed = JSON.parse(raw) as unknown;
-  const items = Array.isArray(parsed) ? (parsed as QuizItem[]) : [];
+  const rawItems = Array.isArray(parsed) ? parsed : [];
+  const items = rawItems.filter(isQuizItem);
 
   return {
     id: manifestEntry?.id ?? id,
     label: manifestEntry?.label ?? id,
     description: manifestEntry?.description ?? "Local quiz dataset",
     items,
+    invalidItemCount: rawItems.length - items.length,
   };
 }
 
@@ -62,5 +64,29 @@ function isManifestEntry(value: unknown): value is DatasetManifestEntry {
     typeof value.id === "string" &&
     "label" in value &&
     typeof value.label === "string"
+  );
+}
+
+function isQuizItem(value: unknown): value is QuizItem {
+  if (typeof value !== "object" || value === null) return false;
+
+  const item = value as Record<string, unknown>;
+
+  return (
+    typeof item.id === "string" &&
+    (item.source === "watcha" || item.source === "manual") &&
+    typeof item.comment === "string" &&
+    typeof item.answerTitle === "string" &&
+    Array.isArray(item.aliases) &&
+    item.aliases.every((alias) => typeof alias === "string") &&
+    (typeof item.year === "number" || item.year === null) &&
+    (typeof item.posterUrl === "string" || item.posterUrl === null) &&
+    Array.isArray(item.directorNames) &&
+    item.directorNames.every((directorName) => typeof directorName === "string") &&
+    (typeof item.ratingRaw === "number" || item.ratingRaw === null) &&
+    (typeof item.ratingStars === "number" || item.ratingStars === null) &&
+    (typeof item.createdAt === "string" || item.createdAt === null) &&
+    typeof item.spoiler === "boolean" &&
+    typeof item.improper === "boolean"
   );
 }

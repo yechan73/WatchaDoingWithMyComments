@@ -1,6 +1,6 @@
 "use client";
 
-import { Play } from "lucide-react";
+import { HelpCircle, Play, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { AnswerInput } from "./AnswerInput";
 import { AnswerReveal } from "./AnswerReveal";
@@ -32,6 +32,7 @@ export function QuizGame({ datasets }: QuizGameProps) {
   const [answer, setAnswer] = useState("");
   const [lastResult, setLastResult] = useState<AnswerMatchResult | null>(null);
   const [finished, setFinished] = useState(false);
+  const [showDatasetHelp, setShowDatasetHelp] = useState(false);
 
   const selectedDataset = datasets.find((dataset) => dataset.id === selectedDatasetId) ?? datasets[0];
   const items = selectedDataset?.items ?? emptyItems;
@@ -102,7 +103,18 @@ export function QuizGame({ datasets }: QuizGameProps) {
           <p className="setup-panel__copy">{selectedDataset?.description ?? "내가 쓴 한줄평만 보고 영화를 맞춰보세요."}</p>
           <div className="control-grid">
             <label>
-              데이터셋
+              <span className="field-label">
+                데이터셋
+                <button
+                  className="help-button"
+                  type="button"
+                  aria-label="데이터셋 추가 방법 보기"
+                  aria-expanded={showDatasetHelp}
+                  onClick={() => setShowDatasetHelp(true)}
+                >
+                  <HelpCircle size={16} />
+                </button>
+              </span>
               <select value={selectedDataset?.id ?? ""} onChange={(event) => selectDataset(event.target.value)}>
                 {datasets.length > 0 ? (
                   datasets.map((dataset) => (
@@ -145,7 +157,16 @@ export function QuizGame({ datasets }: QuizGameProps) {
           <button className="primary-action" type="button" onClick={startGame} disabled={playableCount === 0}>
             <Play size={18} /> {selectedCountLabel} 시작
           </button>
+          {selectedDataset?.invalidItemCount ? (
+            <p className="setup-panel__notice">
+              이 데이터셋에서 형식이 맞지 않는 항목 {selectedDataset.invalidItemCount}개를 제외했습니다.
+            </p>
+          ) : null}
+          {playableCount === 0 ? (
+            <p className="setup-panel__notice">플레이 가능한 항목이 없습니다. 데이터셋 JSON의 comment와 answerTitle을 확인해주세요.</p>
+          ) : null}
         </section>
+        {showDatasetHelp ? <DatasetHelpDialog onClose={() => setShowDatasetHelp(false)} /> : null}
       </main>
     );
   }
@@ -178,4 +199,35 @@ function difficultyLabel(difficulty: Difficulty): string {
   if (difficulty === "easy") return "쉬움";
   if (difficulty === "hard") return "어려움";
   return "보통";
+}
+
+function DatasetHelpDialog({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="modal-backdrop" role="presentation" onClick={onClose}>
+      <section
+        className="modal-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="dataset-help-title"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <header className="modal-panel__header">
+          <h2 id="dataset-help-title">데이터셋 추가 방법</h2>
+          <button className="icon-button" type="button" aria-label="닫기" onClick={onClose}>
+            <X size={18} />
+          </button>
+        </header>
+        <ol className="dataset-help-list">
+          <li>브라우저에서 본인의 Watcha Pedia 댓글 페이지를 열고 개발자 도구의 Network 탭을 확인합니다.</li>
+          <li>댓글 JSON 응답의 body만 복사해서 `data-raw/my-comments.json` 같은 로컬 파일로 저장합니다.</li>
+          <li>쿠키, 인증 헤더, HAR 파일, 세션 정보는 저장하거나 커밋하지 않습니다.</li>
+          <li>
+            `npm run normalize:data -- --input data-raw/my-comments.json --output src/data/users/my-comments.json`를 실행합니다.
+          </li>
+          <li>dev server를 재시작하거나 앱을 다시 빌드하면 새 JSON이 데이터셋 드롭다운에 표시됩니다.</li>
+        </ol>
+        <p className="modal-panel__note">자세한 내용은 `docs/DATASET_GUIDE.md`에 있습니다.</p>
+      </section>
+    </div>
+  );
 }

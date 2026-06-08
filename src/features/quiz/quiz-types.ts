@@ -19,6 +19,7 @@ export interface QuizDataset {
   label: string;
   description: string;
   items: QuizItem[];
+  invalidItemCount: number;
 }
 
 export type QuestionCount = 5 | 10 | 20 | "all";

@@ -1,8 +1,11 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { JSDOM } from "jsdom";
 import type { QuizItem } from "../src/features/quiz/quiz-types";
 import type { WatchaRawComment } from "../src/types/watcha";
+
+type InputFormat = "json" | "html";
 
 interface NormalizeOptions {
   includeSpoilers?: boolean;
@@ -12,12 +15,17 @@ interface NormalizeOptions {
 interface CliOptions extends NormalizeOptions {
   inputPath: string;
   outputPath: string;
+  inputFormat: InputFormat;
 }
 
 type JsonObject = Record<string, unknown>;
 type WatchaPoster = NonNullable<NonNullable<WatchaRawComment["content"]>["poster"]>;
 
-export function parseDatasetInput(raw: string): unknown {
+export function parseDatasetInput(raw: string, inputFormat: InputFormat = "json"): unknown {
+  if (inputFormat === "html") {
+    return parseRenderedWatchaHtmlComments(raw);
+  }
+
   const trimmed = raw.trimStart();
 
   if (trimmed.startsWith("<")) {
@@ -32,6 +40,45 @@ export function parseDatasetInput(raw: string): unknown {
     const message = error instanceof Error ? error.message : "Unknown parse error";
     throw new Error(`Input is not valid JSON. ${message}`);
   }
+}
+
+export function parseRenderedWatchaHtmlComments(raw: string): WatchaRawComment[] {
+  const dom = new JSDOM(`<body>${raw}</body>`);
+  const articles = Array.from(dom.window.document.querySelectorAll("article"));
+
+  return articles.flatMap((article, index) => {
+    const contentLink = article.querySelector('a[title][href*="/contents/"]');
+    const commentLink = article.querySelector('a[href*="/comments/"]');
+    const title = getText(contentLink?.getAttribute("title")) || getText(article.querySelector('[class*="_title_"]')?.textContent);
+    const comment = getText(article.querySelector(".CommentText")?.textContent);
+
+    if (!title || !comment) return [];
+
+    const posterUrl = sanitizeUrl(contentLink?.querySelector("img")?.getAttribute("src"));
+    const contentCode = extractLastPathSegment(contentLink?.getAttribute("href")) || `html-content-${index + 1}`;
+    const commentCode = extractLastPathSegment(commentLink?.getAttribute("href")) || `html-comment-${index + 1}`;
+    const year = extractYear(article.querySelector('[class*="_meta_"]')?.textContent);
+    const ratingStars = parseNumber(article.querySelector('[class*="_rating_"] p')?.textContent);
+
+    return [
+      {
+        code: commentCode,
+        text: comment,
+        content: {
+          code: contentCode,
+          title,
+          year: year ?? undefined,
+          poster: posterUrl ? { large: posterUrl } : undefined,
+          director_names: [],
+        },
+        user_content_action: {
+          rating: ratingStars === null ? undefined : ratingStars * 2,
+        },
+        spoiler: false,
+        improper: false,
+      },
+    ];
+  });
 }
 
 export function normalizeWatchaComments(input: unknown, options: NormalizeOptions = {}): QuizItem[] {
@@ -147,6 +194,44 @@ function normalizeText(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function getText(value: unknown): string {
+  return typeof value === "string" ? value.replace(/\s+/gu, " ").trim() : "";
+}
+
+function extractLastPathSegment(value: unknown): string {
+  if (typeof value !== "string") return "";
+
+  const cleanPath = value.split("?")[0].replace(/\/$/u, "");
+  return cleanPath.split("/").pop() ?? "";
+}
+
+function extractYear(value: unknown): number | null {
+  if (typeof value !== "string") return null;
+
+  const match = value.match(/\b(19|20)\d{2}\b/u);
+  return match ? Number(match[0]) : null;
+}
+
+function parseNumber(value: unknown): number | null {
+  if (typeof value !== "string") return null;
+
+  const parsed = Number(value.trim());
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function sanitizeUrl(value: unknown): string | null {
+  if (typeof value !== "string" || !value.trim()) return null;
+
+  try {
+    const url = new URL(value);
+    url.search = "";
+    url.hash = "";
+    return url.toString();
+  } catch {
+    return null;
+  }
+}
+
 function isRawComment(value: unknown): value is WatchaRawComment {
   return isObject(value) && ("text" in value || "content" in value);
 }
@@ -162,6 +247,7 @@ function isNonEmptyString(value: unknown): value is string {
 function parseCliOptions(args: string[]): CliOptions {
   let inputPath = "";
   let outputPath = "";
+  let inputFormat: InputFormat = "json";
   let includeSpoilers = false;
   let minCommentLength: number | undefined;
 
@@ -185,6 +271,15 @@ function parseCliOptions(args: string[]): CliOptions {
       continue;
     }
 
+    if (arg === "--input-format") {
+      const value = args[index + 1];
+      if (value === "json" || value === "html") {
+        inputFormat = value;
+      }
+      index += 1;
+      continue;
+    }
+
     if (arg === "--min-comment-length") {
       const parsed = Number(args[index + 1]);
       minCommentLength = Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
@@ -203,7 +298,7 @@ function parseCliOptions(args: string[]): CliOptions {
     throw new Error("Both --input and --output are required.");
   }
 
-  return { inputPath, outputPath, includeSpoilers, minCommentLength };
+  return { inputPath, outputPath, inputFormat, includeSpoilers, minCommentLength };
 }
 
 function printHelp() {
@@ -213,6 +308,7 @@ function printHelp() {
 Options:
   -i, --input <path>             Local Watcha-like JSON file to read.
   -o, --output <path>            Normalized QuizItem[] JSON file to write.
+      --input-format <json|html> Input format. Defaults to json.
       --include-spoilers         Keep spoiler comments. Defaults to false.
       --min-comment-length <n>   Exclude comments shorter than n characters.
 `);
@@ -220,7 +316,7 @@ Options:
 
 async function main() {
   const options = parseCliOptions(process.argv.slice(2));
-  const input = parseDatasetInput(await readFile(options.inputPath, "utf8"));
+  const input = parseDatasetInput(await readFile(options.inputPath, "utf8"), options.inputFormat);
   const items = normalizeWatchaComments(input, options);
 
   await mkdir(dirname(options.outputPath), { recursive: true });

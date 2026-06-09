@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { extractRawComments, normalizeWatchaComments, parseDatasetInput } from "../scripts/normalize-watcha-comments";
+import {
+  extractRawComments,
+  normalizeWatchaComments,
+  parseDatasetInput,
+  parseRenderedWatchaHtmlComments,
+} from "../scripts/normalize-watcha-comments";
 
 const firstComment = {
   code: "comment-1",
@@ -69,6 +74,37 @@ describe("parseDatasetInput", () => {
   it("explains when the input is rendered HTML instead of JSON", () => {
     expect(() => parseDatasetInput('<ul class="comments"><li>Not JSON</li></ul>')).toThrow(/looks like HTML/u);
   });
+
+  it("accepts rendered HTML when the html input format is explicit", () => {
+    const input = parseDatasetInput(makeRenderedCommentHtml(), "html");
+
+    expect(normalizeWatchaComments(input)).toHaveLength(1);
+  });
+});
+
+describe("parseRenderedWatchaHtmlComments", () => {
+  it("extracts local rendered Watcha comment markup into raw comments", () => {
+    const [rawComment] = parseRenderedWatchaHtmlComments(makeRenderedCommentHtml());
+
+    expect(rawComment).toMatchObject({
+      code: "comment-1",
+      text: "A remembered line",
+      content: {
+        code: "content-1",
+        title: "Rendered Film",
+        year: 1999,
+        poster: {
+          large: "https://example.test/poster.jpg",
+        },
+        director_names: [],
+      },
+      user_content_action: {
+        rating: 7,
+      },
+      spoiler: false,
+      improper: false,
+    });
+  });
 });
 
 describe("normalizeWatchaComments", () => {
@@ -123,3 +159,26 @@ describe("normalizeWatchaComments", () => {
     expect(items[0].comment).toBe("Long enough spoiler");
   });
 });
+
+function makeRenderedCommentHtml(): string {
+  return `
+    <ul>
+      <li>
+        <article>
+          <header>
+            <div class="_rating_abc"><p>3.5</p></div>
+          </header>
+          <section>
+            <a title="Rendered Film" href="/ko/contents/content-1">
+              <img src="https://example.test/poster.jpg?jwt=secret" />
+            </a>
+            <p class="_meta_abc">영화 ・ 1999</p>
+          </section>
+          <a href="/ko/comments/comment-1">
+            <p class="CommentText">A remembered line</p>
+          </a>
+        </article>
+      </li>
+    </ul>
+  `;
+}

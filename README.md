@@ -21,6 +21,7 @@ The repository currently contains a working sample quiz app, answer matching log
 - [SWRS](docs/SWRS.md): software/work requirements specification.
 - [Data Policy](docs/DATA_POLICY.md): data handling, privacy, and allowed/disallowed data.
 - [Dataset Guide](docs/DATASET_GUIDE.md): safe manual dataset preparation flow.
+- [Mobile Testing](docs/MOBILE_TESTING.md): GitHub Pages mobile test environment.
 - [Development Plan](docs/DEVELOPMENT_PLAN.md): phase-based implementation plan.
 - [Planning](docs/PLANNING.md): current implementation status and remaining work.
 
@@ -41,6 +42,12 @@ The normalization script reads only local JSON files and writes normalized `Quiz
 npm run normalize:data -- --input data-raw/comments.json --output src/data/users/my-comments.json
 ```
 
+Rendered local HTML can be converted only when explicitly requested:
+
+```bash
+npm run normalize:data -- --input data-raw/comments.html --output src/data/users/my-comments.json --input-format html
+```
+
 Supported input shapes:
 
 - A single Watcha-like response object.
@@ -50,6 +57,14 @@ Supported input shapes:
 After writing a normalized JSON file under `src/data/users/`, restart the dev
 server or rebuild the app. Local dataset files appear in the home screen dataset
 dropdown.
+
+## Mobile Test Environment
+
+After changes are pushed to `main`, GitHub Actions deploys the static app to:
+
+```text
+https://yechan73.github.io/WatchaDoingWithMyComments/
+```
 
 ## Recommended Stack
 

@@ -38,8 +38,18 @@ data-raw/my-comments.json
 Do not save request headers, cookies, session tokens, HAR files, or any browser
 authentication data into the repository.
 
-Do not copy from the Elements panel. Rendered page markup is HTML, and the local
-normalization script expects JSON.
+Do not copy from the Elements panel when you can get JSON from Network.
+Rendered page markup is HTML, and JSON is the preferred input.
+
+If you already have a local rendered HTML snippet, the script can parse it only
+when explicitly requested:
+
+```bash
+npm run normalize:data -- --input data-raw/my-comments.html --output src/data/users/my-comments.json --input-format html
+```
+
+HTML parsing is a fallback for local files only. It does not call Watcha and it
+does not preserve query strings from image URLs.
 
 ## Normalize The File
 

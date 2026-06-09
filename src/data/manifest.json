@@ -5,5 +5,12 @@
     "description": "테스트용 가짜 영화 코멘트 데이터셋",
     "itemCount": 6,
     "path": "src/data/users/sample.json"
+  },
+  {
+    "id": "yechan-comments",
+    "label": "Yechan comments",
+    "description": "로컬 HTML에서 변환한 예찬 코멘트 데이터셋",
+    "itemCount": 9,
+    "path": "src/data/users/yechan-comments.json"
   }
 ]

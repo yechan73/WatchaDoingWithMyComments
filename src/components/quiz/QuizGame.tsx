@@ -162,6 +162,13 @@ export function QuizGame({ datasets }: QuizGameProps) {
               이 데이터셋에서 형식이 맞지 않는 항목 {selectedDataset.invalidItemCount}개를 제외했습니다.
             </p>
           ) : null}
+          {selectedDataset?.validationMessages.length ? (
+            <ul className="setup-panel__notice-list" aria-label="데이터셋 검증 메시지">
+              {selectedDataset.validationMessages.map((message) => (
+                <li key={message}>{message}</li>
+              ))}
+            </ul>
+          ) : null}
           {playableCount === 0 ? (
             <p className="setup-panel__notice">플레이 가능한 항목이 없습니다. 데이터셋 JSON의 comment와 answerTitle을 확인해주세요.</p>
           ) : null}

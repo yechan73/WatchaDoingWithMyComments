@@ -3,14 +3,15 @@ import { dirname, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { QuizItem } from "../src/features/quiz/quiz-types";
 
-type InputFormat = "json" | "html";
+type InputFormat = "auto" | "json" | "html";
+type ResolvedInputFormat = "json" | "html";
 type WatchaNormalizer = typeof import("./normalize-watcha-comments");
 
 interface ImportOptions {
   source: string;
   inputPath: string;
   outputPath?: string;
-  inputFormat: InputFormat;
+  inputFormat?: InputFormat;
   label?: string;
   description?: string;
   includeSpoilers?: boolean;
@@ -42,7 +43,7 @@ export function resolveWatchaCommentsSource(source: string): WatchaCommentsSourc
   if (!trimmed) throw new Error("Watcha Pedia user id or comments URL is required.");
 
   const userId = isLikelyUserId(trimmed) ? trimmed : extractWatchaUserId(trimmed);
-  const datasetId = `watcha-${slugify(userId) || "comments"}`;
+  const datasetId = `${slugify(userId) || "watcha"}-watcha-comments`;
   const commentsUrl = `https://pedia.watcha.com/ko/users/${encodeURIComponent(userId)}/comments`;
 
   return {
@@ -50,8 +51,8 @@ export function resolveWatchaCommentsSource(source: string): WatchaCommentsSourc
     commentsUrl,
     datasetId,
     outputPath: `src/data/users/${datasetId}.json`,
-    defaultLabel: `Watcha comments (${userId})`,
-    defaultDescription: `Watcha Pedia comments imported from ${commentsUrl}`,
+    defaultLabel: formatDatasetLabel(userId),
+    defaultDescription: `Watcha Pedia movie comments imported from ${commentsUrl}`,
   };
 }
 
@@ -60,14 +61,15 @@ export async function importWatchaComments(options: ImportOptions): Promise<{ it
   const outputPath = options.outputPath ?? source.outputPath;
   const { normalizeWatchaComments, parseDatasetInput } = await loadNormalizer();
   const rawInput = await readFile(options.inputPath, "utf8");
-  const parsedInput = parseDatasetInput(rawInput, options.inputFormat);
+  const parsedInput = parseDatasetInput(rawInput, resolveInputFormat(rawInput, options.inputPath, options.inputFormat));
   const items = getImportedQuizItems(parsedInput);
-  const normalizedItems =
+  const normalizedItems = dedupeMovieItems(
     items ??
     normalizeWatchaComments(parsedInput, {
       includeSpoilers: options.includeSpoilers,
       minCommentLength: options.minCommentLength,
-    });
+    }),
+  );
 
   await mkdir(dirname(outputPath), { recursive: true });
   await writeFile(outputPath, `${JSON.stringify(normalizedItems, null, 2)}\n`, "utf8");
@@ -90,7 +92,7 @@ function getImportedQuizItems(input: unknown): QuizItem[] | null {
   if (!candidate) return null;
   if (!candidate.every(isQuizItem)) return null;
 
-  return dedupeMovieItems(candidate);
+  return candidate;
 }
 
 function isQuizItem(value: unknown): value is QuizItem {
@@ -133,6 +135,18 @@ function isMovieQuizItem(item: QuizItem): boolean {
 
 async function loadNormalizer(): Promise<WatchaNormalizer> {
   return import(`./normalize-watcha-comments.${"ts"}`) as Promise<WatchaNormalizer>;
+}
+
+function resolveInputFormat(rawInput: string, inputPath: string, inputFormat = "auto"): ResolvedInputFormat {
+  if (inputFormat === "json" || inputFormat === "html") return inputFormat;
+
+  const trimmed = rawInput.trimStart();
+  if (trimmed.startsWith("<")) return "html";
+
+  const normalizedPath = inputPath.toLowerCase();
+  if (normalizedPath.endsWith(".html") || normalizedPath.endsWith(".htm")) return "html";
+
+  return "json";
 }
 
 async function upsertManifestEntry(entry: DatasetManifestEntry): Promise<void> {
@@ -200,6 +214,20 @@ function slugify(value: string): string {
     .slice(0, 64);
 }
 
+function formatDatasetLabel(userId: string): string {
+  const trimmed = userId.trim();
+  if (!trimmed) return "Watcha comments";
+
+  if (/^[a-z]+(?:[-_][a-z]+)*$/u.test(trimmed)) {
+    return trimmed
+      .split(/[-_]/u)
+      .map((part) => `${part.charAt(0).toUpperCase()}${part.slice(1)}`)
+      .join(" ");
+  }
+
+  return trimmed;
+}
+
 function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
@@ -220,7 +248,7 @@ function parseCliOptions(args: string[]): ImportOptions {
   let source = "";
   let inputPath = "";
   let outputPath: string | undefined;
-  let inputFormat: InputFormat = "html";
+  let inputFormat: InputFormat = "auto";
   let label: string | undefined;
   let description: string | undefined;
   let includeSpoilers = false;
@@ -250,7 +278,7 @@ function parseCliOptions(args: string[]): ImportOptions {
 
     if (arg === "--input-format") {
       const value = args[index + 1];
-      if (value === "json" || value === "html") inputFormat = value;
+      if (value === "auto" || value === "json" || value === "html") inputFormat = value;
       index += 1;
       continue;
     }
@@ -301,13 +329,13 @@ function parseCliOptions(args: string[]): ImportOptions {
 function printHelp() {
   console.log(`Usage:
   npm run import:watcha -- --source VRZv4O9DPqr6y --input data-raw/my-comments.html
-  npm run import:watcha -- --source https://pedia.watcha.com/ko/users/VRZv4O9DPqr6y/comments --input data-raw/my-comments.json --input-format json
+  npm run import:watcha -- --source https://pedia.watcha.com/ko/users/VRZv4O9DPqr6y/comments --input data-raw/my-comments.json
 
 Options:
       --source, --url, --user <id|url>  Watcha Pedia user id, profile URL, or comments URL.
   -i, --input <path>                    Local rendered HTML or Watcha-like JSON file.
-  -o, --output <path>                   Output QuizItem[] JSON path. Defaults to src/data/users/watcha-{userId}.json.
-      --input-format <json|html>        Input format. Defaults to html.
+  -o, --output <path>                   Output QuizItem[] JSON path. Defaults to src/data/users/{userId}-watcha-comments.json.
+      --input-format <auto|json|html>   Input format. Defaults to auto.
       --label <label>                   Manifest label.
       --description <text>              Manifest description.
       --include-spoilers                Keep spoiler comments. Defaults to false.

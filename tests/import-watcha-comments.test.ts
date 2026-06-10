@@ -23,8 +23,8 @@ describe("resolveWatchaCommentsSource", () => {
     expect(resolveWatchaCommentsSource("VRZv4O9DPqr6y")).toMatchObject({
       userId: "VRZv4O9DPqr6y",
       commentsUrl: "https://pedia.watcha.com/ko/users/VRZv4O9DPqr6y/comments",
-      datasetId: "watcha-vrzv4o9dpqr6y",
-      outputPath: "src/data/users/watcha-vrzv4o9dpqr6y.json",
+      datasetId: "vrzv4o9dpqr6y-watcha-comments",
+      outputPath: "src/data/users/vrzv4o9dpqr6y-watcha-comments.json",
     });
   });
 
@@ -61,13 +61,13 @@ describe("importWatchaComments", () => {
     });
     expect(manifest).toContainEqual(
       expect.objectContaining({
-        id: "watcha-vrzv4o9dpqr6y",
+        id: "vrzv4o9dpqr6y-watcha-comments",
         itemCount: 1,
       }),
     );
   });
 
-  it("accepts exported helper payloads with normalized quiz items", async () => {
+  it("auto-detects exported helper JSON payloads with normalized quiz items", async () => {
     await writeFile(
       "helper-output.json",
       JSON.stringify({
@@ -80,7 +80,6 @@ describe("importWatchaComments", () => {
     const result = await importWatchaComments({
       source: "VRZv4O9DPqr6y",
       inputPath: "helper-output.json",
-      inputFormat: "json",
       updateManifest: false,
     });
 
@@ -119,7 +118,7 @@ function makeRenderedCommentsListHtml(): string {
       <div class="_comments_1abc">
         <ul>
           <li>
-            <a href="/ko/contents/content-2" title="List Film">
+            <a href="/ko/contents/m-list-film" title="List Film">
               <img alt="List Film" src="https://example.test/list-poster.jpg?token=remove-me" />
             </a>
             <p class="_meta_def">영화 · 2024</p>

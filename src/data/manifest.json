@@ -1,16 +1,16 @@
 [
   {
-    "id": "yechan-comments",
-    "label": "Yechan comments",
-    "description": "왓챠피디아에서 가져온 예찬 영화 코멘트 데이터셋",
-    "itemCount": 20,
-    "path": "src/data/users/yechan-comments.json"
+    "id": "yechan-watcha-comments",
+    "label": "Yechan",
+    "description": "왓챠피디아에서 가져온 Yechan 영화 코멘트 데이터셋",
+    "itemCount": 174,
+    "path": "src/data/users/yechan-watcha-comments.json"
   },
   {
-    "id": "starter-comments",
-    "label": "Starter comments",
-    "description": "바로 플레이해볼 수 있는 기본 코멘트 데이터셋",
-    "itemCount": 6,
-    "path": "src/data/users/starter-comments.json"
+    "id": "yoonjae-watcha-comments",
+    "label": "Yoonjae",
+    "description": "왓챠피디아에서 가져온 Yoonjae 영화 코멘트 데이터셋",
+    "itemCount": 45,
+    "path": "src/data/users/yoonjae-watcha-comments.json"
   }
 ]

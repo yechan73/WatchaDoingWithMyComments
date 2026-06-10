@@ -75,7 +75,7 @@ does not preserve query strings from image URLs.
 The helper output can be registered as a local dataset:
 
 ```bash
-npm run import:watcha -- --source VRZv4O9DPqr6y --input data-raw/VRZv4O9DPqr6y-watcha-comments.json --input-format json
+npm run import:watcha -- --source VRZv4O9DPqr6y --input data-raw/VRZv4O9DPqr6y-watcha-comments.json
 ```
 
 For your Watcha Pedia comments URL:
@@ -93,7 +93,7 @@ npm run import:watcha -- --source VRZv4O9DPqr6y --input data-raw/my-comments.htm
 For a local Watcha-like JSON response:
 
 ```bash
-npm run import:watcha -- --source VRZv4O9DPqr6y --input data-raw/my-comments.json --input-format json
+npm run import:watcha -- --source VRZv4O9DPqr6y --input data-raw/my-comments.json
 ```
 
 Optional flags:
@@ -109,6 +109,8 @@ Optional flags:
 The import script writes a normalized `QuizItem[]` JSON file under
 `src/data/users/` by default and updates `src/data/manifest.json` with a useful
 label, description, item count, and path.
+JSON input is detected automatically. Use `--input-format html` only for a
+local rendered HTML snippet.
 
 The underlying normalizer supports:
 

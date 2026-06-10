@@ -10,25 +10,20 @@ import { QuizCard } from "./QuizCard";
 import { ScoreBoard } from "./ScoreBoard";
 import { matchAnswer, type AnswerMatchResult } from "@/features/quiz/answer-matcher";
 import { createQuizSession } from "@/features/quiz/quiz-engine";
-import type { Difficulty, QuestionCount, QuizAttempt, QuizDataset, QuizItem } from "@/features/quiz/quiz-types";
+import type { QuestionCount, QuizAttempt, QuizDataset, QuizItem } from "@/features/quiz/quiz-types";
 
 interface QuizGameProps {
   datasets: QuizDataset[];
 }
 
 const questionCountOptions: QuestionCount[] = [5, 10, 20, "all"];
-const difficulties: Array<{ value: Difficulty; label: string }> = [
-  { value: "easy", label: "쉬움" },
-  { value: "normal", label: "보통" },
-  { value: "hard", label: "어려움" },
-];
+const questionTimeLimitSeconds = 30;
 const emptyItems: QuizItem[] = [];
 
 export function QuizGame({ datasets }: QuizGameProps) {
   const [selectedDatasetId, setSelectedDatasetId] = useState(datasets[0]?.id ?? "");
   const [questionCount, setQuestionCount] = useState<QuestionCount>(5);
-  const [difficulty, setDifficulty] = useState<Difficulty>("normal");
-  const [timeLeft, setTimeLeft] = useState(getTimeLimitSeconds("normal"));
+  const [timeLeft, setTimeLeft] = useState(questionTimeLimitSeconds);
   const [quizItems, setQuizItems] = useState<QuizItem[]>([]);
   const [attempts, setAttempts] = useState<QuizAttempt[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -38,7 +33,6 @@ export function QuizGame({ datasets }: QuizGameProps) {
   const [showDatasetHelp, setShowDatasetHelp] = useState(false);
   const hasInternalHistoryEntry = useRef(false);
   const isGameScreenRef = useRef(false);
-  const difficultyRef = useRef(difficulty);
 
   const selectedDataset = datasets.find((dataset) => dataset.id === selectedDatasetId) ?? datasets[0];
   const items = selectedDataset?.items ?? emptyItems;
@@ -57,10 +51,6 @@ export function QuizGame({ datasets }: QuizGameProps) {
   }, []);
 
   useEffect(() => {
-    difficultyRef.current = difficulty;
-  }, [difficulty]);
-
-  useEffect(() => {
     isGameScreenRef.current = Boolean(currentItem) || finished;
   }, [currentItem, finished]);
 
@@ -69,7 +59,7 @@ export function QuizGame({ datasets }: QuizGameProps) {
       if (!isGameScreenRef.current && !hasInternalHistoryEntry.current) return;
 
       hasInternalHistoryEntry.current = false;
-      resetGameState(getTimeLimitSeconds(difficultyRef.current));
+      resetGameState(questionTimeLimitSeconds);
     }
 
     window.addEventListener("popstate", handlePopState);
@@ -110,7 +100,7 @@ export function QuizGame({ datasets }: QuizGameProps) {
     setAnswer("");
     setLastResult(null);
     setFinished(false);
-    setTimeLeft(getTimeLimitSeconds(difficulty));
+    setTimeLeft(questionTimeLimitSeconds);
   }
 
   function startGame() {
@@ -122,7 +112,7 @@ export function QuizGame({ datasets }: QuizGameProps) {
     setAnswer("");
     setLastResult(null);
     setFinished(false);
-    setTimeLeft(getTimeLimitSeconds(difficulty));
+    setTimeLeft(questionTimeLimitSeconds);
   }
 
   function returnHome() {
@@ -131,7 +121,7 @@ export function QuizGame({ datasets }: QuizGameProps) {
       return;
     }
 
-    resetGameState(getTimeLimitSeconds(difficulty));
+    resetGameState(questionTimeLimitSeconds);
   }
 
   function pushGameHistoryEntry() {
@@ -167,7 +157,7 @@ export function QuizGame({ datasets }: QuizGameProps) {
     setCurrentIndex((index) => index + 1);
     setAnswer("");
     setLastResult(null);
-    setTimeLeft(getTimeLimitSeconds(difficulty));
+    setTimeLeft(questionTimeLimitSeconds);
   }
 
   if (finished) {
@@ -228,23 +218,6 @@ export function QuizGame({ datasets }: QuizGameProps) {
                 ))}
               </select>
             </label>
-            <label>
-              난이도
-              <select
-                value={difficulty}
-                onChange={(event) => {
-                  const nextDifficulty = event.target.value as Difficulty;
-                  setDifficulty(nextDifficulty);
-                  setTimeLeft(getTimeLimitSeconds(nextDifficulty));
-                }}
-              >
-                {difficulties.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
           </div>
           <button className="primary-action" type="button" onClick={startGame} disabled={playableCount === 0}>
             <Play size={18} /> {selectedCountLabel} 시작
@@ -278,7 +251,6 @@ export function QuizGame({ datasets }: QuizGameProps) {
             <Home size={16} /> 홈
           </button>
           <div className="quiz-header__status">
-            <p className="eyebrow">{difficultyLabel(difficulty)}</p>
             <span className={`timer-badge${timeLeft <= 5 && !lastResult ? " timer-badge--danger" : ""}`}>
               <Clock3 size={16} />
               {timeLeft}초
@@ -288,7 +260,7 @@ export function QuizGame({ datasets }: QuizGameProps) {
             </strong>
           </div>
         </header>
-        <QuizCard item={currentItem} difficulty={difficulty} revealed={Boolean(lastResult)} />
+        <QuizCard item={currentItem} elapsedSeconds={questionTimeLimitSeconds - timeLeft} revealed={Boolean(lastResult)} />
         <AnswerInput value={answer} disabled={Boolean(lastResult)} onChange={setAnswer} onSubmit={submitAnswer} />
         {lastResult ? (
           <AnswerReveal
@@ -301,16 +273,6 @@ export function QuizGame({ datasets }: QuizGameProps) {
       </div>
     </main>
   );
-}
-
-function difficultyLabel(difficulty: Difficulty): string {
-  if (difficulty === "easy") return "쉬움";
-  if (difficulty === "hard") return "어려움";
-  return "보통";
-}
-
-function getTimeLimitSeconds(difficulty: Difficulty): number {
-  return difficulty === "easy" ? 20 : 15;
 }
 
 function DatasetHelpDialog({ onClose }: { onClose: () => void }) {

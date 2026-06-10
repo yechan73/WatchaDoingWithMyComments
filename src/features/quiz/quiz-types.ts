@@ -24,8 +24,6 @@ export interface QuizDataset {
 }
 
 export type QuestionCount = 5 | 10 | 20 | "all";
-export type Difficulty = "easy" | "normal" | "hard";
-
 export interface QuizAttempt {
   item: QuizItem;
   userAnswer: string;

@@ -1,17 +1,17 @@
 import Image from "next/image";
-import type { Difficulty, QuizItem } from "@/features/quiz/quiz-types";
+import type { QuizItem } from "@/features/quiz/quiz-types";
 import { formatRatingStars } from "@/lib/rating";
 
 interface QuizCardProps {
   item: QuizItem;
-  difficulty: Difficulty;
+  elapsedSeconds: number;
   revealed: boolean;
 }
 
-export function QuizCard({ item, difficulty, revealed }: QuizCardProps) {
-  const showRating = difficulty !== "hard";
-  const showDirector = difficulty === "easy";
-  const hasHints = showRating || showDirector;
+export function QuizCard({ item, elapsedSeconds, revealed }: QuizCardProps) {
+  const showRating = elapsedSeconds >= 10;
+  const showDetails = elapsedSeconds >= 20;
+  const hasHints = showRating || showDetails;
 
   return (
     <section className="quiz-card" aria-label="문제 카드">
@@ -27,11 +27,17 @@ export function QuizCard({ item, difficulty, revealed }: QuizCardProps) {
                     <dd>{formatRatingStars(item.ratingStars)}</dd>
                   </div>
                 ) : null}
-                {showDirector ? (
-                  <div>
-                    <dt>감독</dt>
-                    <dd>{item.directorNames.join(", ") || "힌트 없음"}</dd>
-                  </div>
+                {showDetails ? (
+                  <>
+                    <div>
+                      <dt>감독</dt>
+                      <dd>{item.directorNames.join(", ") || "힌트 없음"}</dd>
+                    </div>
+                    <div>
+                      <dt>개봉년도</dt>
+                      <dd>{item.year ?? "힌트 없음"}</dd>
+                    </div>
+                  </>
                 ) : null}
               </dl>
             ) : null}
@@ -45,4 +51,3 @@ export function QuizCard({ item, difficulty, revealed }: QuizCardProps) {
     </section>
   );
 }
-

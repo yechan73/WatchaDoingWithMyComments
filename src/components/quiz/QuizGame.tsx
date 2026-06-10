@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { Clock3, HelpCircle, Play, X } from "lucide-react";
+import { Clock3, HelpCircle, Home, Play, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import watchaLogoImage from "../../../public/brand/watcha-logo.jpg";
+import watchaLogoImage from "../../../public/brand/watcha-logo.png";
 import { AnswerInput } from "./AnswerInput";
 import { AnswerReveal } from "./AnswerReveal";
 import { QuizCard } from "./QuizCard";
@@ -83,6 +83,16 @@ export function QuizGame({ datasets }: QuizGameProps) {
   function startGame() {
     const session = createQuizSession(items, questionCount);
     setQuizItems(session.items);
+    setAttempts([]);
+    setCurrentIndex(0);
+    setAnswer("");
+    setLastResult(null);
+    setFinished(false);
+    setTimeLeft(getTimeLimitSeconds(difficulty));
+  }
+
+  function returnHome() {
+    setQuizItems([]);
     setAttempts([]);
     setCurrentIndex(0);
     setAnswer("");
@@ -224,8 +234,11 @@ export function QuizGame({ datasets }: QuizGameProps) {
     <main className="quiz-screen">
       <div className="quiz-shell">
         <header className="quiz-header">
-          <p className="eyebrow">{difficultyLabel(difficulty)}</p>
+          <button className="home-action" type="button" onClick={returnHome}>
+            <Home size={16} /> 홈
+          </button>
           <div className="quiz-header__status">
+            <p className="eyebrow">{difficultyLabel(difficulty)}</p>
             <span className={`timer-badge${timeLeft <= 5 && !lastResult ? " timer-badge--danger" : ""}`}>
               <Clock3 size={16} />
               {timeLeft}초

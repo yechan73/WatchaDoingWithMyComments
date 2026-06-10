@@ -14,7 +14,10 @@ Last reviewed: 2026-06-10
 - `Yechan comments` 데이터셋이 기본 순서의 첫 번째 데이터셋이다.
 - 기존 예시 데이터셋은 `starter-comments`로 이름을 바꿨다.
 - 홈 화면은 Watcha 로고 이미지, 문제 수, 난이도 설정을 보여준다.
+- 브랜드 컬러는 Watcha Pink `#FF0558`와 Watcha Black `#000000`을 중심으로
+  사용하고, UI 색상은 Pink, Black, White만 사용한다. 전역 폰트는 Noto Sans KR이다.
 - 퀴즈 제한시간은 난이도에 따라 고정된다. 쉬움은 20초, 보통과 어려움은 15초다.
+- 문제 풀이 중 홈 화면으로 돌아갈 수 있는 버튼이 있다.
 - 정답 공개 시 포스터가 있으면 이미지를 보여주고, 없으면 설계된 빈 상태를
   보여준다.
 - 로컬 정규화 스크립트 `scripts/normalize-watcha-comments.ts`는 JSON 또는
@@ -34,18 +37,17 @@ Last reviewed: 2026-06-10
 
 ### 1. Watcha Pedia 로고 적용
 
-현재 홈 타이틀의 `Watcha` 부분은 Watcha Pedia 스타일의 텍스트 마크로
-분리했다. 정확한 공식 로고 파일을 쓰려면 다음 중 하나가 필요하다.
-
-- 사용자가 제공한 로고 파일을 `public/brand/`에 추가한다.
-- 공개 사용이 허용된 공식 브랜드 에셋의 사용 조건을 확인한 뒤 추가한다.
+현재 홈 타이틀의 `Watcha` 부분은 사용자가 제공한 투명 배경 로고 이미지
+`public/brand/watcha-logo.png`를 사용한다. 로고와 심볼에는 Watcha Pink를
+우선 적용하고, 전체 UI는 Watcha Black 기반의 어두운 배경 위에 Pink를
+강조색으로 사용한다.
 
 Acceptance:
 
 - 홈 첫 화면에서 브랜드가 작은 nav 텍스트가 아니라 명확한 첫 시각 신호로
   보인다.
-- 공식 이미지 파일을 쓰는 경우, 출처와 사용 범위를 README나 별도 문서에
-  기록한다.
+- `Doing with My Comments`는 한 줄로 표시된다.
+- Noto Sans KR이 전역 폰트로 적용된다.
 
 ### 2. 예시 표현 제거
 

@@ -6,26 +6,30 @@
     "answerTitle": "카사블랑카",
     "aliases": [],
     "year": 1942,
-    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/A8SgtsaqEoMB35TcK_7tgQ.jpg",
-    "directorNames": [],
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/A8SgtsaqEoMB35TcK_7tgQ.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXlMM04wYjNKbEwybHRZV2RsTHpFMk5qWXhOVGc0TURBMU9EQTJNamcyTXpJaWZRLm1qZVpxRWN5UEU3a0M4YVhLWUM5STlNS0hBMkpvRVZtSnlTWVVpV3R5QVk=",
+    "directorNames": [
+      "마이클 커티즈"
+    ],
     "ratingRaw": 7,
     "ratingStars": 3.5,
-    "createdAt": null,
+    "createdAt": "2026-06-04T09:26:40+09:00",
     "spoiler": false,
     "improper": false
   },
   {
-    "id": "watcha-mo2moxw-1sy49t5",
+    "id": "watcha-mo2moxw-i74etv",
     "source": "watcha",
-    "comment": "지가 바람피워놓고 요란하게도 구네 (그나저나 무성영화 볼 때 꿀팁! 즉흥 더빙하면서 보면 깔깔 웃으면서 볼 수 있다)",
+    "comment": "지가 바람피워놓고 요란하게도 구네\n\n(그나저나 무성영화 볼 때 꿀팁! 즉흥 더빙하면서 보면 깔깔 웃으면서 볼 수 있다)",
     "answerTitle": "선라이즈",
     "aliases": [],
     "year": 1927,
-    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/xVdweqJxLsxELZClHkhofQ.jpg",
-    "directorNames": [],
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/xVdweqJxLsxELZClHkhofQ.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXhMMmhzY3psalp6azVaMkpqYTNOek5HaDNkblYySW4wLjctX0dVN1FoOTZleFN4ajNXZ2JOUEZ2eHdqdFlvbXRHeGRWTDR1WTFvaXM=",
+    "directorNames": [
+      "F. W. 무르나우"
+    ],
     "ratingRaw": 5,
     "ratingStars": 2.5,
-    "createdAt": null,
+    "createdAt": "2026-06-04T09:22:42+09:00",
     "spoiler": false,
     "improper": false
   },
@@ -36,11 +40,13 @@
     "answerTitle": "레베카",
     "aliases": [],
     "year": 2020,
-    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/e5at5uWsRD9G2rIkka0KqA.jpg",
-    "directorNames": [],
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/e5at5uWsRD9G2rIkka0KqA.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXhMMmhzYXpGMmFHOXhiM0EwWkdKeU9YVjBZV0ZrSW4wLkFsaklsbWNWckcxY0hfZkJkazllSnF2eS1saEhlTDc5YUVuTUdDT3hwOWs=",
+    "directorNames": [
+      "벤 휘틀리"
+    ],
     "ratingRaw": 6,
     "ratingStars": 3,
-    "createdAt": null,
+    "createdAt": "2026-05-26T13:14:23+09:00",
     "spoiler": false,
     "improper": false
   },
@@ -51,11 +57,13 @@
     "answerTitle": "비틀쥬스 비틀쥬스",
     "aliases": [],
     "year": 2024,
-    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/HGCXJHO8tkH2BYCqSbbrvQ.jpg",
-    "directorNames": [],
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/HGCXJHO8tkH2BYCqSbbrvQ.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXlMM04wYjNKbEwybHRZV2RsTHpnM01Ea3lNamM0TnpFMU5qY2lmUS5GOGZRWDlTbF9wZ1ZYNTNvYlRVemVOd0xITS1NVXlIRFVIM1FMRVV5WHg0",
+    "directorNames": [
+      "팀 버튼"
+    ],
     "ratingRaw": 6,
     "ratingStars": 3,
-    "createdAt": null,
+    "createdAt": "2026-05-26T13:14:15+09:00",
     "spoiler": false,
     "improper": false
   },
@@ -66,11 +74,13 @@
     "answerTitle": "뒷자리에 태워줘",
     "aliases": [],
     "year": 2025,
-    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/hbN0kkEhHGsgKYg8oD08hQ.jpg",
-    "directorNames": [],
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/hbN0kkEhHGsgKYg8oD08hQ.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXlMM04wYjNKbEwybHRZV2RsTHpZek9UZzJNVGt4TlRRME56RTBJbjAub01ySHdQY0xDX1lEN2ROa0xVWUpxakhHcGZlaHktdERUX1ZfTXFiQW81cw==",
+    "directorNames": [
+      "해리 라이턴"
+    ],
     "ratingRaw": 5,
     "ratingStars": 2.5,
-    "createdAt": null,
+    "createdAt": "2026-05-26T13:14:02+09:00",
     "spoiler": false,
     "improper": false
   },
@@ -81,26 +91,30 @@
     "answerTitle": "너바나 더 밴드: 전설적 밴드 ‘너바나’와는 별 관련 없는 ‘너바나 더 밴드’의 콤비 맷과 제이. 어느 날 공연을 위해 타임머신을 만드는 황당한 작전을 세우고 처음 만났던 17년 전으로 돌",
     "aliases": [],
     "year": 2025,
-    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/ifjjMMrJ2weH2yq83BuvOA.jpg",
-    "directorNames": [],
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/ifjjMMrJ2weH2yq83BuvOA.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXlMM04wYjNKbEwybHRZV2RsTHpjNE56UTJOVGd3TkRVME5ETXdJbjAuTEl0MTRySnhwR1hfSk9nM1dfeXJEV1hfcnZUZEpRaS1COWlma1ZLZk1rQQ==",
+    "directorNames": [
+      "맷 존슨"
+    ],
     "ratingRaw": 9,
     "ratingStars": 4.5,
-    "createdAt": null,
+    "createdAt": "2026-05-26T13:12:48+09:00",
     "spoiler": false,
     "improper": false
   },
   {
     "id": "watcha-mop7qaw-1ce8dxz",
     "source": "watcha",
-    "comment": "어젯~밤 꿈~속 맨~덜리🌌🌊",
+    "comment": "어젯속 맨~덜리🌌🌊",
     "answerTitle": "레베카",
     "aliases": [],
     "year": 1940,
-    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/l-XXWFdmNeqTlZ-_kYX_pQ.jpg",
-    "directorNames": [],
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/l-XXWFdmNeqTlZ-_kYX_pQ.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXlMM04wYjNKbEwybHRZV2RsTHpFMk5UYzJNRGd6TmpZNU16VTVOakl5TlRjaWZRLktZb3dsQWdrNVpGM3Nra3lISzFaZ2xmNFpIY29ueFFoeGpIcHM1OHlwN28=",
+    "directorNames": [
+      "알프레드 히치콕"
+    ],
     "ratingRaw": 8,
     "ratingStars": 4,
-    "createdAt": null,
+    "createdAt": "2026-05-18T13:48:32+09:00",
     "spoiler": false,
     "improper": false
   },
@@ -111,11 +125,13 @@
     "answerTitle": "침묵의 친구",
     "aliases": [],
     "year": 2025,
-    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/j3eFPOEy5bb2xW-Zl6q-rg.jpg",
-    "directorNames": [],
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/j3eFPOEy5bb2xW-Zl6q-rg.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXlMM04wYjNKbEwybHRZV2RsTHpnNE1EYzFNamMxTXpFNU9ETTFJbjAuS2JfaFB6YUl2WVBTSm4wQ0lVX0FjNFdpWDJDSE4wU05oOUFQZUJzT2p1SQ==",
+    "directorNames": [
+      "일디코 에네디"
+    ],
     "ratingRaw": 8,
     "ratingStars": 4,
-    "createdAt": null,
+    "createdAt": "2026-05-18T13:46:48+09:00",
     "spoiler": false,
     "improper": false
   },
@@ -126,11 +142,202 @@
     "answerTitle": "빽 투 더 퓨쳐",
     "aliases": [],
     "year": 1985,
-    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/7OMavgNrgW0hs_aBDD29xg.jpg",
-    "directorNames": [],
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/7OMavgNrgW0hs_aBDD29xg.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXlMM04wYjNKbEwybHRZV2RsTHpFMk56QTFNRFE0TURneE5EazNORGMyTnpVaWZRLlZqNC1RMjBWaWxMVHVDakZ6TENGTGlELXNSVG9GQy1sVFN2RUlmbXFoaG8=",
+    "directorNames": [
+      "로버트 저메키스"
+    ],
     "ratingRaw": 6,
     "ratingStars": 3,
-    "createdAt": null,
+    "createdAt": "2026-05-16T14:02:40+09:00",
+    "spoiler": false,
+    "improper": false
+  },
+  {
+    "id": "watcha-m5rbod5-1sqmi0x",
+    "source": "watcha",
+    "comment": "영화를 보고도 완벽한 해석과 이동진 5점의 이유를 찾으면서 내가 기댈 수 있는 마스터를 찾아헤매는 것이 인간인것을",
+    "answerTitle": "마스터",
+    "aliases": [],
+    "year": 2012,
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/oZg5NB-MS-swoOGkYMoJvw.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXhMM0JoWlhOeFoyaG9ialozWkhGeE5USnRkR1ZsSW4wLjVxclNqU2NqallELUJZbEFuU1NZVy1GUk1ORXRmdnVRUjAxMUVqa3Y4OEU=",
+    "directorNames": [
+      "폴 토머스 앤더슨"
+    ],
+    "ratingRaw": 7,
+    "ratingStars": 3.5,
+    "createdAt": "2026-05-16T14:02:00+09:00",
+    "spoiler": false,
+    "improper": false
+  },
+  {
+    "id": "watcha-m5x1mla-wr17ia",
+    "source": "watcha",
+    "comment": "레이디가가 때문에 1점추가",
+    "answerTitle": "악마는 프라다를 입는다 2",
+    "aliases": [],
+    "year": 2026,
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/oGt53ayYat5Yyukk1tSx7A.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXlMM04wYjNKbEwybHRZV2RsTHpRMk1UazNORFU1TkRBek9UY2lmUS5MR09iZ2JCNzlzVVBKanphTGtzX2VkWDJ2a19yZEoyYVcyY2p3aU9iME53",
+    "directorNames": [
+      "데이비드 프랭클"
+    ],
+    "ratingRaw": 6,
+    "ratingStars": 3,
+    "createdAt": "2026-05-16T13:54:46+09:00",
+    "spoiler": false,
+    "improper": false
+  },
+  {
+    "id": "watcha-moamrpo-4hvyyn",
+    "source": "watcha",
+    "comment": "인용수 개짱많은 논문 읽은 느낌",
+    "answerTitle": "현기증",
+    "aliases": [],
+    "year": 1958,
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/VTbGysVBiUYbpc2NnVxvLA.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXhMM1oxZDJSdGNEaGxjbTF3YlhrNVpYQTNibXBtSW4wLm0ySkwzMFFST05rVkd5LTNKRHp3bVVJYkZtT3J4aWEya2NvMTU5cnhDUFE=",
+    "directorNames": [
+      "알프레드 히치콕"
+    ],
+    "ratingRaw": 8,
+    "ratingStars": 4,
+    "createdAt": "2026-05-16T13:54:09+09:00",
+    "spoiler": false,
+    "improper": false
+  },
+  {
+    "id": "watcha-mo8kkm3-1t97vq0",
+    "source": "watcha",
+    "comment": "시간대가 오후인 것도 한 몫 했다",
+    "answerTitle": "오후의 그물망",
+    "aliases": [],
+    "year": 1943,
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/WfDT0ifldRNlGCQgeiWmkQ.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXhMM1J1YmpKNlkySTFPR3B3TURkdmVXTmtiREpsSW4wLmlfWE10eFVsVXRGMjFIRGVzZGh6d3lmM05qR2hfV1lPYVVsVjRZTG1WSzg=",
+    "directorNames": [
+      "마야 데렌",
+      "알렉산더 해미드"
+    ],
+    "ratingRaw": 7,
+    "ratingStars": 3.5,
+    "createdAt": "2026-05-16T13:21:32+09:00",
+    "spoiler": false,
+    "improper": false
+  },
+  {
+    "id": "watcha-mobv3k1-m24uws",
+    "source": "watcha",
+    "comment": "쿠파 주니어 맵 만드는 씬(만) 진짜 최고임",
+    "answerTitle": "슈퍼 마리오 갤럭시",
+    "aliases": [],
+    "year": 2026,
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/SMPMNBVMSop-YKhcgK3beg.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXlMM04wYjNKbEwybHRZV2RsTHpNd01EazVNRE16T1RBeU1UWXpJbjAuQVlRV0FVdk9NVHd1X191MUZHUEdnbkJOOU02dmRIcWJpUGwxWGRicG1JZw==",
+    "directorNames": [
+      "마이클 젤레닉",
+      "아론 호바스"
+    ],
+    "ratingRaw": 4,
+    "ratingStars": 2,
+    "createdAt": "2026-05-11T10:34:02+09:00",
+    "spoiler": false,
+    "improper": false
+  },
+  {
+    "id": "watcha-m9dbjpd-1btgaw7",
+    "source": "watcha",
+    "comment": "나도 이제 꺼드럭댈 수 있다",
+    "answerTitle": "시민 케인",
+    "aliases": [],
+    "year": 1941,
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/d9nfnlPNpJFsapiEAp0W3w.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXhMM0I2YUhwamRta3hjMkZxWkdGc2RIVTRlVzQ1SW4wLkxlNjJHUEVpODNDQjZVNWczQ1gyNVV5aXhGMUJjYk1qQUFsQnlaS0Q4QWc=",
+    "directorNames": [
+      "오슨 웰스"
+    ],
+    "ratingRaw": 8,
+    "ratingStars": 4,
+    "createdAt": "2026-05-11T10:33:47+09:00",
+    "spoiler": false,
+    "improper": false
+  },
+  {
+    "id": "watcha-m5xjmla-1mb7x9j",
+    "source": "watcha",
+    "comment": "너무 어지러워. 패드로 인물관계도 그리면서 보게해줘.",
+    "answerTitle": "인히어런트 바이스",
+    "aliases": [],
+    "year": 2014,
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/4_yW4v7lQbhOUh49AFdw4w.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXhMM2h5Wm1aNFpUQTJaV2R5WTNsMGJXNXFZMnQ0SW4wLlhyalBXNVN3NS12dEExQkRlZXV4S3V1Wm83dk9ucFE1V2g3Y294N1Q1ZUk=",
+    "directorNames": [
+      "폴 토머스 앤더슨"
+    ],
+    "ratingRaw": 5,
+    "ratingStars": 2.5,
+    "createdAt": "2026-05-10T00:52:03+09:00",
+    "spoiler": false,
+    "improper": false
+  },
+  {
+    "id": "watcha-m5nq7nd-1dookc4",
+    "source": "watcha",
+    "comment": "이 모든 게 다 쇼였다니",
+    "answerTitle": "데어 윌 비 블러드",
+    "aliases": [],
+    "year": 2007,
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/TqBcpMwy90qHOnRlco__cw.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXhMMjEyYlRWaWNHUnFlR1Z4WjNobWNHSnNaemw2SW4wLjdhSkgzTng5aDVHcFdUTW55R2l2aEVOWEJTNGphNkJIOUFKTlRlOFgzbTg=",
+    "directorNames": [
+      "폴 토머스 앤더슨"
+    ],
+    "ratingRaw": 8,
+    "ratingStars": 4,
+    "createdAt": "2026-05-10T00:48:32+09:00",
+    "spoiler": false,
+    "improper": false
+  },
+  {
+    "id": "watcha-mw9pl6k-guittw",
+    "source": "watcha",
+    "comment": "자동차 세워둔거 예술작품같고 좋았는데 아쉽",
+    "answerTitle": "해피엔드",
+    "aliases": [],
+    "year": 2024,
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/8xPv095BvykEh-mRDJa9FA.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXlMM04wYjNKbEwybHRZV2RsTHpreU1qQXhNRGd5TWpJNE9UazVJbjAuNTdZd0VLWWpTT21NcGtZLTZiYm9zaWRQYW8tYzFnUVdEbE9PX3RHVzV5Zw==",
+    "directorNames": [
+      "네오 소라"
+    ],
+    "ratingRaw": 6,
+    "ratingStars": 3,
+    "createdAt": "2026-05-08T09:18:41+09:00",
+    "spoiler": false,
+    "improper": false
+  },
+  {
+    "id": "watcha-mwvqoam-1unew7n",
+    "source": "watcha",
+    "comment": "이런 엔딩에도 시스템은 정당할거라고, 인간은 인간을 구할거라고 착각하고 살고 싶다",
+    "answerTitle": "두 검사",
+    "aliases": [],
+    "year": 2025,
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/xM78m_8LlbeU4lGajG_uMw.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXlMM04wYjNKbEwybHRZV2RsTHpFNE56QXpNelU1TVRnME5ERXhJbjAuWEROcnBSMi1XQ040QkxuOEc3UVBzNWJKODBvTzByNngxUHlOMmJ2S3dsUQ==",
+    "directorNames": [
+      "세르게이 로즈니차"
+    ],
+    "ratingRaw": 7,
+    "ratingStars": 3.5,
+    "createdAt": "2026-05-08T09:04:46+09:00",
+    "spoiler": false,
+    "improper": false
+  },
+  {
+    "id": "watcha-me5dmqw-1vcjew7",
+    "source": "watcha",
+    "comment": "빗소리가 이렇게 크지 않았었는데",
+    "answerTitle": "줄무늬 파자마를 입은 소년",
+    "aliases": [],
+    "year": 2008,
+    "posterUrl": "https://an2-img.amz.wtchn.net/image/v2/YppkpFRw6V4XrWvP18QVBA.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXlMM04wYjNKbEwybHRZV2RsTHpReU9ERXdOVGM0TmpJd01EazJJbjAuSjJWenRQZmlGazJSNmFyUnN6aFRZUHRDZXEwUW1fQlpvRTc1WkhKeEd0NA==",
+    "directorNames": [
+      "마크 허만"
+    ],
+    "ratingRaw": 7,
+    "ratingStars": 3.5,
+    "createdAt": "2026-05-05T10:53:01+09:00",
     "spoiler": false,
     "improper": false
   }

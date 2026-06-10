@@ -50,7 +50,7 @@ export function WatchaImportClient({ basePath }: WatchaImportClientProps) {
       const items = extractQuizItems(parsed);
 
       if (items.length === 0) {
-        setImportStatus("플레이 가능한 코멘트가 없습니다.");
+        setImportStatus("플레이 가능한 영화 코멘트가 없습니다.");
         setDataset(null);
         return;
       }
@@ -63,7 +63,7 @@ export function WatchaImportClient({ basePath }: WatchaImportClientProps) {
         invalidItemCount: 0,
         validationMessages: [],
       });
-      setImportStatus(`${items.length}개 코멘트를 불러왔습니다.`);
+      setImportStatus(`${items.length}개 영화 코멘트를 불러왔습니다.`);
     } catch {
       setImportStatus("JSON 파일을 읽지 못했습니다.");
       setDataset(null);
@@ -118,7 +118,7 @@ export function WatchaImportClient({ basePath }: WatchaImportClientProps) {
 
 function extractQuizItems(input: unknown): QuizItem[] {
   const candidate = Array.isArray(input) ? input : isObject(input) && Array.isArray(input.items) ? input.items : [];
-  return candidate.filter(isQuizItem);
+  return dedupeMovieItems(candidate.filter(isQuizItem));
 }
 
 function isQuizItem(value: unknown): value is QuizItem {
@@ -143,4 +143,18 @@ function isQuizItem(value: unknown): value is QuizItem {
 
 function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
+}
+
+function dedupeMovieItems(items: QuizItem[]): QuizItem[] {
+  const seen = new Set<string>();
+
+  return items.filter((item) => {
+    if (!item.id.startsWith("watcha-m")) return false;
+
+    const key = `${item.id}:${item.answerTitle}:${item.comment}`;
+    if (seen.has(key)) return false;
+
+    seen.add(key);
+    return true;
+  });
 }

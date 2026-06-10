@@ -2,8 +2,8 @@
   {
     "id": "yechan-comments",
     "label": "Yechan comments",
-    "description": "로컬 HTML에서 변환한 예찬 코멘트 데이터셋",
-    "itemCount": 9,
+    "description": "왓챠피디아에서 가져온 예찬 영화 코멘트 데이터셋",
+    "itemCount": 20,
     "path": "src/data/users/yechan-comments.json"
   },
   {

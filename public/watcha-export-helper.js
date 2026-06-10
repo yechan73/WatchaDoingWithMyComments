@@ -1,5 +1,5 @@
 (async function watchaDoingExportHelper() {
-  const contentTypes = ["movies", "tv_seasons", "books", "webtoons"];
+  const contentTypes = ["movies"];
   const userId = getUserId();
 
   if (!userId) {
@@ -21,7 +21,7 @@
       rawComments.push(...comments);
     }
 
-    const items = dedupe(rawComments.map(normalizeComment).filter(Boolean));
+    const items = dedupe(rawComments.map(normalizeComment).filter(isMovieQuizItem));
     const payload = {
       schema: "watcha-doing-with-my-comments/export-v1",
       source: "watcha-pedia-browser-helper",
@@ -138,11 +138,15 @@ function selectPosterUrl(poster) {
 function dedupe(items) {
   const seen = new Set();
   return items.filter((item) => {
-    const key = `${item.answerTitle}:${item.comment}`;
+    const key = `${item.id}:${item.answerTitle}:${item.comment}`;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
   });
+}
+
+function isMovieQuizItem(item) {
+  return item && typeof item.id === "string" && item.id.startsWith("watcha-m");
 }
 
 function createQuizItemId(base, comment, index) {

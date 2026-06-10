@@ -88,8 +88,9 @@ export async function importWatchaComments(options: ImportOptions): Promise<{ it
 function getImportedQuizItems(input: unknown): QuizItem[] | null {
   const candidate = Array.isArray(input) ? input : isObject(input) && Array.isArray(input.items) ? input.items : null;
   if (!candidate) return null;
+  if (!candidate.every(isQuizItem)) return null;
 
-  return candidate.every(isQuizItem) ? candidate : null;
+  return dedupeMovieItems(candidate);
 }
 
 function isQuizItem(value: unknown): value is QuizItem {
@@ -110,6 +111,24 @@ function isQuizItem(value: unknown): value is QuizItem {
     typeof value.spoiler === "boolean" &&
     typeof value.improper === "boolean"
   );
+}
+
+function dedupeMovieItems(items: QuizItem[]): QuizItem[] {
+  const seen = new Set<string>();
+
+  return items.filter((item) => {
+    if (!isMovieQuizItem(item)) return false;
+
+    const key = `${item.id}:${item.answerTitle}:${item.comment}`;
+    if (seen.has(key)) return false;
+
+    seen.add(key);
+    return true;
+  });
+}
+
+function isMovieQuizItem(item: QuizItem): boolean {
+  return item.id.startsWith("watcha-m");
 }
 
 async function loadNormalizer(): Promise<WatchaNormalizer> {

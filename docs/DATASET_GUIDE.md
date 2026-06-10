@@ -29,6 +29,10 @@ The helper runs inside your browser on `pedia.watcha.com`. It does not send your
 data back to this app or to another server. It only creates a local JSON download
 that you can review.
 
+Only movie comments are used by the game. The helper requests the `movies`
+comments endpoint, and the app also filters imported JSON to items whose id
+starts with `watcha-m`.
+
 ## Manual Browser Method
 
 Use this only for your own data, or data from someone who explicitly agreed to

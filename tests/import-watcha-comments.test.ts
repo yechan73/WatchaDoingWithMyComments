@@ -72,7 +72,7 @@ describe("importWatchaComments", () => {
       "helper-output.json",
       JSON.stringify({
         schema: "watcha-doing-with-my-comments/export-v1",
-        items: [makeQuizItem()],
+        items: [makeQuizItem(), makeQuizItem(), makeQuizItem({ id: "watcha-te6y4gy-1hwpal5", answerTitle: "TV Show" })],
       }),
       "utf8",
     );
@@ -91,9 +91,13 @@ describe("importWatchaComments", () => {
   });
 });
 
-function makeQuizItem() {
+function makeQuizItem(overrides: Partial<ReturnType<typeof makeQuizItemBase>> = {}) {
+  return { ...makeQuizItemBase(), ...overrides };
+}
+
+function makeQuizItemBase() {
   return {
-    id: "watcha-helper-movie-1",
+    id: "watcha-m-helper-1",
     source: "watcha",
     comment: "Helper comment",
     answerTitle: "Helper Movie",

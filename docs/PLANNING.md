@@ -173,6 +173,13 @@ Acceptance:
 - 1차 구현은 로컬 스크립트로 둔다. 가능한 흐름은 사용자가 저장한 HTML 또는
   브라우저에서 렌더링된 DOM 스냅샷을 입력받아 `src/data/users/{id}.json`을
   생성하는 방식이다.
+- 구현된 1차 CLI는 `npm run import:watcha -- --source {userId|url} --input data-raw/my-comments.html`이다.
+- 이 CLI는 사용자 ID/프로필 URL/코멘트 URL을 코멘트 URL로 정규화하고, 출력 JSON과
+  `src/data/manifest.json` 항목을 함께 갱신한다.
+- `/import` 화면은 Watcha 페이지에서 실행할 헬퍼를 제공하고, 헬퍼가 다운로드한
+  JSON을 업로드해 브라우저에서 바로 게임을 시작할 수 있게 한다.
+- 헬퍼는 Watcha Pedia 로그인 세션이 있는 브라우저 안에서만 실행되며, 우리 앱은
+  쿠키, 인증 헤더, 비밀번호를 저장하지 않는다.
 
 ### P2. 포스터 불러오기
 

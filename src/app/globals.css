@@ -103,9 +103,10 @@ button { min-height: 2.75rem; border: 0; border-radius: 0.5rem; cursor: pointer;
 button:disabled, input:disabled { cursor: not-allowed; opacity: 0.58; }
 button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--accent-strong); outline-offset: 2px; }
 
-.home-screen, .quiz-screen, .result-screen { display: grid; min-height: 100vh; place-items: center; padding: 1.25rem; }
-.setup-panel, .quiz-shell, .result-panel { width: min(100%, 46rem); }
+.home-screen, .quiz-screen, .result-screen, .import-screen { display: grid; min-height: 100vh; place-items: center; padding: 1.25rem; }
+.setup-panel, .quiz-shell, .result-panel, .import-panel { width: min(100%, 46rem); }
 .setup-panel h1, .result-panel h1 { max-width: 100%; margin: 0; font-size: 4.25rem; line-height: 0.95; letter-spacing: 0; }
+.import-panel h1 { margin: 0; font-size: 3.6rem; line-height: 1; letter-spacing: 0; }
 .app-title { display: grid; gap: 0.55rem; }
 .app-title span { white-space: nowrap; }
 .watcha-logo { width: min(100%, 16rem); height: auto; object-fit: contain; }
@@ -120,8 +121,14 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 .help-button, .icon-button { display: inline-grid; min-width: 2rem; min-height: 2rem; place-items: center; border: 1px solid var(--line); background: var(--surface-strong); color: var(--text); padding: 0; }
 .help-button { border-radius: 999px; color: var(--accent-strong); }
 select, input { width: 100%; min-height: 3rem; border: 1px solid var(--line); border-radius: 0.5rem; background: var(--surface); color: var(--text); padding: 0 0.95rem; }
-.primary-action, .answer-reveal button, .result-panel button, .home-action { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--accent); color: var(--watcha-white); font-weight: 800; padding: 0 1.1rem; }
+.primary-action, .answer-reveal button, .result-panel button, .home-action, .import-link { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--accent); color: var(--watcha-white); font-weight: 800; padding: 0 1.1rem; }
 .home-action { min-height: 2.35rem; border: 1px solid var(--accent); background: var(--watcha-black); color: var(--watcha-white); padding: 0 0.85rem; }
+.import-link { min-height: 2.75rem; border: 1px solid var(--accent); border-radius: 0.5rem; text-decoration: none; }
+.import-actions { display: flex; flex-wrap: wrap; gap: 0.65rem; margin: 1.5rem 0 1rem; }
+.import-steps { display: grid; gap: 0.45rem; margin: 1.25rem 0; padding-left: 1.25rem; color: var(--muted); line-height: 1.55; }
+.import-steps li::marker { color: var(--accent); font-weight: 900; }
+.import-dropzone { display: grid; min-height: 8rem; place-items: center; gap: 0.45rem; border: 1px dashed var(--accent); border-radius: 0.5rem; background: rgba(255, 5, 88, 0.1); color: var(--watcha-white); font-weight: 900; }
+.import-dropzone input { width: min(100%, 20rem); min-height: auto; border: 0; padding: 0; background: transparent; color: var(--muted); }
 .modal-backdrop { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; background: rgba(0, 0, 0, 0.72); padding: 1rem; }
 .modal-panel { width: min(100%, 38rem); max-height: min(42rem, calc(100vh - 2rem)); overflow: auto; overflow-wrap: anywhere; border: 1px solid var(--line); border-radius: 0.5rem; background: var(--surface); box-shadow: 0 1.5rem 5rem rgba(0, 0, 0, 0.7); padding: 1.1rem; }
 .modal-panel__header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }

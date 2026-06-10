@@ -292,13 +292,11 @@ function DatasetHelpDialog({ onClose }: { onClose: () => void }) {
           </button>
         </header>
         <ol className="dataset-help-list">
-          <li>브라우저에서 본인의 Watcha Pedia 댓글 페이지를 열고 개발자 도구의 Network 탭을 확인합니다.</li>
-          <li>댓글 JSON 응답의 body만 복사해서 `data-raw/my-comments.json` 같은 로컬 파일로 저장합니다.</li>
+          <li>`/import` 화면에서 Watcha 헬퍼를 복사합니다.</li>
+          <li>Watcha Pedia에 로그인한 브라우저에서 내 코멘트 페이지를 열고 헬퍼를 실행합니다.</li>
+          <li>헬퍼가 다운로드한 JSON을 `/import` 화면에 업로드하면 바로 게임을 시작할 수 있습니다.</li>
+          <li>로컬 데이터셋으로 고정하려면 `npm run import:watcha -- --source USER_ID --input data-raw/my-comments.json`을 실행합니다.</li>
           <li>쿠키, 인증 헤더, HAR 파일, 세션 정보는 저장하거나 커밋하지 않습니다.</li>
-          <li>
-            `npm run normalize:data -- --input data-raw/my-comments.json --output src/data/users/my-comments.json`를 실행합니다.
-          </li>
-          <li>dev server를 재시작하거나 앱을 다시 빌드하면 새 JSON이 데이터셋 드롭다운에 표시됩니다.</li>
         </ol>
         <p className="modal-panel__note">자세한 내용은 `docs/DATASET_GUIDE.md`에 있습니다.</p>
       </section>

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Clock3, HelpCircle, Home, Play, X } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import watchaLogoImage from "../../../public/brand/watcha-logo.png";
 import { AnswerInput } from "./AnswerInput";
 import { AnswerReveal } from "./AnswerReveal";
@@ -36,12 +36,45 @@ export function QuizGame({ datasets }: QuizGameProps) {
   const [lastResult, setLastResult] = useState<AnswerMatchResult | null>(null);
   const [finished, setFinished] = useState(false);
   const [showDatasetHelp, setShowDatasetHelp] = useState(false);
+  const hasInternalHistoryEntry = useRef(false);
+  const isGameScreenRef = useRef(false);
+  const difficultyRef = useRef(difficulty);
 
   const selectedDataset = datasets.find((dataset) => dataset.id === selectedDatasetId) ?? datasets[0];
   const items = selectedDataset?.items ?? emptyItems;
   const currentItem = quizItems[currentIndex];
   const selectedCountLabel = questionCount === "all" ? "전체" : `${questionCount}문제`;
   const playableCount = useMemo(() => items.filter((item) => item.comment && item.answerTitle).length, [items]);
+
+  const resetGameState = useCallback((nextTimeLeft: number) => {
+    setQuizItems([]);
+    setAttempts([]);
+    setCurrentIndex(0);
+    setAnswer("");
+    setLastResult(null);
+    setFinished(false);
+    setTimeLeft(nextTimeLeft);
+  }, []);
+
+  useEffect(() => {
+    difficultyRef.current = difficulty;
+  }, [difficulty]);
+
+  useEffect(() => {
+    isGameScreenRef.current = Boolean(currentItem) || finished;
+  }, [currentItem, finished]);
+
+  useEffect(() => {
+    function handlePopState() {
+      if (!isGameScreenRef.current && !hasInternalHistoryEntry.current) return;
+
+      hasInternalHistoryEntry.current = false;
+      resetGameState(getTimeLimitSeconds(difficultyRef.current));
+    }
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [resetGameState]);
 
   useEffect(() => {
     if (!currentItem || lastResult) return;
@@ -82,6 +115,7 @@ export function QuizGame({ datasets }: QuizGameProps) {
 
   function startGame() {
     const session = createQuizSession(items, questionCount);
+    pushGameHistoryEntry();
     setQuizItems(session.items);
     setAttempts([]);
     setCurrentIndex(0);
@@ -92,13 +126,19 @@ export function QuizGame({ datasets }: QuizGameProps) {
   }
 
   function returnHome() {
-    setQuizItems([]);
-    setAttempts([]);
-    setCurrentIndex(0);
-    setAnswer("");
-    setLastResult(null);
-    setFinished(false);
-    setTimeLeft(getTimeLimitSeconds(difficulty));
+    if (hasInternalHistoryEntry.current) {
+      window.history.back();
+      return;
+    }
+
+    resetGameState(getTimeLimitSeconds(difficulty));
+  }
+
+  function pushGameHistoryEntry() {
+    if (hasInternalHistoryEntry.current) return;
+
+    window.history.pushState({ watchaDoingWithMyComments: "game" }, "", window.location.href);
+    hasInternalHistoryEntry.current = true;
   }
 
   function submitAnswer() {

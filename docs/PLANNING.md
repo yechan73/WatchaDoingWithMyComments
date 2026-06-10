@@ -71,6 +71,14 @@ Acceptance:
 - 사용자가 저장한 로컬 JSON 파일을 정규화한다.
 - 사용자가 저장한 로컬 HTML 파일을 명시적으로 `--input-format html`로
   정규화한다.
+- Watcha Pedia 코멘트 URL 패턴은
+  `https://pedia.watcha.com/ko/users/{userId}/comments`다. 예:
+  `https://pedia.watcha.com/ko/users/VRZv4O9DPqr6y/comments`.
+- 렌더링된 코멘트는 현재 `body > main > div[class*="_comments_"] > ul > li`
+  형태로 나열되며, 각 `li` 안에서 영화 링크, 제목, 포스터 이미지, 코멘트 링크,
+  코멘트 본문을 추출한다.
+- 모든 코멘트를 포함하려면 페이지에서 스크롤을 내려 lazy-loaded 항목을 먼저
+  로딩한 뒤 HTML을 저장해야 한다.
 - URL 입력은 먼저 URL 종류를 판별하고, 필요한 로컬 저장 방법을 안내하는
   import wizard로 시작한다.
 - 공개 접근 가능한 정적 HTML만 fetch하는 기능은 별도 검토 후 옵션으로 둔다.
@@ -80,6 +88,8 @@ Acceptance:
 - `src/app/import/page.tsx`: URL, 파일 업로드, 변환 옵션을 받는 import 화면.
 - `scripts/import-watcha-local.ts`: 로컬 파일 검증, 정규화, manifest 업데이트.
 - `scripts/normalize-watcha-comments.ts`: URL을 직접 호출하지 않는 핵심 변환기 유지.
+- HTML 파서는 기존 `article` 구조와 Watcha Pedia comments list의 `li` 구조를
+  모두 지원한다.
 - 변환 결과 미리보기: 총 항목 수, 제외된 스포일러/부적절 항목 수, 포스터
   누락 수, 긴 제목 후보를 보여준다.
 

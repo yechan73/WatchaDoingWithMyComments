@@ -44,21 +44,26 @@ export function parseDatasetInput(raw: string, inputFormat: InputFormat = "json"
 
 export function parseRenderedWatchaHtmlComments(raw: string): WatchaRawComment[] {
   const dom = new JSDOM(`<body>${raw}</body>`);
-  const articles = Array.from(dom.window.document.querySelectorAll("article"));
+  const commentNodes = selectRenderedCommentNodes(dom.window.document);
 
-  return articles.flatMap((article, index) => {
-    const contentLink = article.querySelector('a[title][href*="/contents/"]');
-    const commentLink = article.querySelector('a[href*="/comments/"]');
-    const title = getText(contentLink?.getAttribute("title")) || getText(article.querySelector('[class*="_title_"]')?.textContent);
-    const comment = getText(article.querySelector(".CommentText")?.textContent);
+  return commentNodes.flatMap((commentNode, index) => {
+    const contentLink = commentNode.querySelector('a[title][href*="/contents/"], a[href*="/contents/"]');
+    const commentLink = commentNode.querySelector('a[href*="/comments/"]');
+    const title =
+      getText(contentLink?.getAttribute("title")) ||
+      getText(contentLink?.getAttribute("aria-label")) ||
+      getText(contentLink?.querySelector("img")?.getAttribute("alt")) ||
+      getText(commentNode.querySelector('[class*="_title_"]')?.textContent) ||
+      getText(contentLink?.textContent);
+    const comment = findRenderedCommentText(commentNode);
 
     if (!title || !comment) return [];
 
     const posterUrl = sanitizeUrl(contentLink?.querySelector("img")?.getAttribute("src"));
     const contentCode = extractLastPathSegment(contentLink?.getAttribute("href")) || `html-content-${index + 1}`;
     const commentCode = extractLastPathSegment(commentLink?.getAttribute("href")) || `html-comment-${index + 1}`;
-    const year = extractYear(article.querySelector('[class*="_meta_"]')?.textContent);
-    const ratingStars = parseNumber(article.querySelector('[class*="_rating_"] p')?.textContent);
+    const year = extractYear(commentNode.querySelector('[class*="_meta_"]')?.textContent);
+    const ratingStars = parseNumber(commentNode.querySelector('[class*="_rating_"] p')?.textContent);
 
     return [
       {
@@ -79,6 +84,27 @@ export function parseRenderedWatchaHtmlComments(raw: string): WatchaRawComment[]
       },
     ];
   });
+}
+
+function selectRenderedCommentNodes(document: Document): Element[] {
+  const commentListItems = Array.from(
+    document.querySelectorAll('main div[class^="_comments_"] > ul > li, main div[class*="_comments_"] > ul > li'),
+  );
+
+  if (commentListItems.length > 0) return commentListItems;
+
+  return Array.from(document.querySelectorAll("article"));
+}
+
+function findRenderedCommentText(commentNode: Element): string {
+  const explicitText = getText(commentNode.querySelector(".CommentText")?.textContent);
+  if (explicitText) return explicitText;
+
+  const commentLink = commentNode.querySelector('a[href*="/comments/"]');
+  const commentText = getText(commentLink?.textContent);
+  const title = getText(commentNode.querySelector('a[href*="/contents/"]')?.textContent);
+
+  return title && commentText.startsWith(title) ? commentText.slice(title.length).trim() : commentText;
 }
 
 export function normalizeWatchaComments(input: unknown, options: NormalizeOptions = {}): QuizItem[] {

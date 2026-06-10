@@ -105,6 +105,29 @@ describe("parseRenderedWatchaHtmlComments", () => {
       improper: false,
     });
   });
+
+  it("extracts comments from Watcha Pedia comments list items", () => {
+    const [rawComment] = parseRenderedWatchaHtmlComments(makeRenderedCommentsListHtml());
+
+    expect(rawComment).toMatchObject({
+      code: "comment-2",
+      text: "스크롤해서 로딩한 코멘트",
+      content: {
+        code: "content-2",
+        title: "List Film",
+        year: 2024,
+        poster: {
+          large: "https://example.test/list-poster.jpg",
+        },
+        director_names: [],
+      },
+      user_content_action: {
+        rating: 4,
+      },
+      spoiler: false,
+      improper: false,
+    });
+  });
 });
 
 describe("normalizeWatchaComments", () => {
@@ -180,5 +203,28 @@ function makeRenderedCommentHtml(): string {
         </article>
       </li>
     </ul>
+  `;
+}
+
+function makeRenderedCommentsListHtml(): string {
+  return `
+    <body>
+      <main>
+        <div class="_comments_1abc">
+          <ul>
+            <li>
+              <a href="/ko/contents/content-2" title="List Film">
+                <img alt="List Film" src="https://example.test/list-poster.jpg?token=remove-me" />
+              </a>
+              <p class="_meta_def">영화 ・ 2024</p>
+              <div class="_rating_xyz"><p>2</p></div>
+              <a href="/ko/comments/comment-2">
+                <p class="CommentText">스크롤해서 로딩한 코멘트</p>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </main>
+    </body>
   `;
 }

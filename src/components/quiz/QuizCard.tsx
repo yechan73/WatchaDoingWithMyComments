@@ -38,7 +38,7 @@ export function QuizCard({ item, difficulty, revealed }: QuizCardProps) {
           </>
         ) : (
           <div className="quiz-card__poster" aria-hidden="true">
-            {item.posterUrl ? <Image src={item.posterUrl} alt="" fill sizes="16rem" unoptimized /> : <span>POSTER</span>}
+            {item.posterUrl ? <Image src={item.posterUrl} alt="" fill sizes="16rem" unoptimized /> : <span>포스터 없음</span>}
           </div>
         )}
       </div>

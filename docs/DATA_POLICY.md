@@ -4,7 +4,7 @@ This project uses local/static JSON datasets. It must not implement real-time Wa
 
 ## Allowed Data
 
-- Fake sample data created for tests or demos
+- Fictional starter data created for tests or demos
 - The user's own comment data
 - Data from friends who explicitly consented to sharing
 - Normalized quiz data without cookies, headers, tokens, or private profile information

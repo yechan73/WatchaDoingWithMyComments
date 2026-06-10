@@ -39,7 +39,7 @@ That enables static export and the repository base path
 ## Mobile QA Checklist
 
 - Home screen loads on mobile data and Wi-Fi.
-- Dataset dropdown includes `Sample comments` and `Yechan comments`.
+- Dataset dropdown includes `Yechan comments` and `Starter comments`.
 - Dataset help button opens and closes the help dialog.
 - A 5-question quiz can start, submit answers, reveal answers, and reach results.
 - Long comments and long titles do not overlap controls.

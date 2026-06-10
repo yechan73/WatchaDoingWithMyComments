@@ -269,7 +269,7 @@ watcha-doing-with-my-comments/
 │  │
 │  ├─ data/
 │  │  ├─ users/
-│  │  │  └─ sample.json
+│  │  │  └─ starter-comments.json
 │  │  └─ manifest.json
 │  │
 │  └─ types/
@@ -300,7 +300,7 @@ The game must not fetch live data from external services during gameplay. It mus
 
 Allowed in Git:
 
-- User-created sample data
+- User-created starter data
 - The user's own comment data
 - Data from friends who consented to sharing
 - Fake test data
@@ -388,7 +388,7 @@ Required elements:
 
 ### FR-002. Dataset Selection
 
-The user can select one normalized JSON dataset included in the project. MVP may include only `sample` or one personal dataset.
+The user can select one normalized JSON dataset included in the project. MVP may include only `starter-comments` or one personal dataset.
 
 ### FR-003. Question Count
 
@@ -579,17 +579,17 @@ Completion criteria:
 - `npm run dev` or equivalent runs.
 - Basic home screen renders.
 
-### Phase 2. Sample Data Connection
+### Phase 2. Starter Data Connection
 
 Goals:
 
-- Create `src/data/users/sample.json`.
+- Create `src/data/users/starter-comments.json`.
 - Define `QuizItem` type.
 - Write data loading function.
 
 Completion criteria:
 
-- Home screen recognizes sample dataset.
+- Home screen recognizes starter dataset.
 - Dataset count can be shown.
 
 ### Phase 3. Quiz Engine
@@ -787,7 +787,7 @@ Allowed:
 
 - Local JSON normalization
 - User-prepared JSON upload or paste
-- Sample-data-based game
+- Starter-data-based game
 - Static game based on normalized datasets
 
 ## 17. Codex Work Rules
@@ -829,8 +829,8 @@ Important constraints:
 First target:
 - Create a Next.js + TypeScript + Tailwind project structure.
 - Follow the folder structure in docs/SWRS.md.
-- Create sample QuizItem JSON.
-- Let the home screen select question count and start a sample quiz.
+- Create starter QuizItem JSON.
+- Let the home screen select question count and start a starter-data quiz.
 - Split answer matching into separately testable functions.
 
 After work, these commands should pass:
@@ -847,7 +847,7 @@ MVP is complete when:
 
 - Code is organized in a private GitHub repository.
 - It runs locally after `npm install`.
-- A game can start with sample JSON.
+- A game can start with starter JSON.
 - The user can choose question count.
 - One-line comments appear as cards.
 - The user can type and submit movie titles.

@@ -32,18 +32,18 @@ Verification:
 - Build succeeds.
 - Basic home screen renders.
 
-## Phase 2. Sample Data Connection
+## Phase 2. Starter Data Connection
 
 Goals:
 
 - Add `QuizItem` type.
-- Add `src/data/users/sample.json`.
+- Add `src/data/users/starter-comments.json`.
 - Add dataset manifest.
 - Load and count datasets on the home screen.
 
 Verification:
 
-- Sample dataset appears.
+- Starter dataset appears.
 - Data count is visible.
 - Invalid data does not crash the app.
 
@@ -84,7 +84,7 @@ Goals:
 
 Verification:
 
-- A 10-question sample game can be completed.
+- A 10-question starter-data game can be completed.
 - Keyboard-only play works.
 
 ## Phase 6. Card Flip and Results

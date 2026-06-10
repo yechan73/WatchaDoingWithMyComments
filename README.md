@@ -2,7 +2,7 @@
 
 Personal web quiz game based on locally prepared Watcha Pedia comment data.
 
-The repository currently contains a working sample quiz app, answer matching logic, tests, and a local JSON normalization script. Do not implement crawler, login, API bypass, or live Watcha API collection features.
+The repository currently contains a working local-data quiz app, answer matching logic, tests, and a local JSON normalization script. Do not implement crawler, login, API bypass, or live Watcha API collection features.
 
 ## Project Intent
 

@@ -1,6 +1,6 @@
 [
   {
-    "id": "sample-rebecca-2020",
+    "id": "starter-rebecca-2020",
     "source": "manual",
     "comment": "패션쇼를 하고싶었던거지",
     "answerTitle": "레베카",
@@ -15,7 +15,7 @@
     "improper": false
   },
   {
-    "id": "sample-beetlejuice-2024",
+    "id": "starter-beetlejuice-2024",
     "source": "manual",
     "comment": "이 정도면 저승도 재개발이 필요하다",
     "answerTitle": "비틀쥬스 비틀쥬스",
@@ -30,7 +30,7 @@
     "improper": false
   },
   {
-    "id": "sample-spider-man-no-way-home",
+    "id": "starter-spider-man-no-way-home",
     "source": "manual",
     "comment": "문 하나 잘못 열었다가 추억까지 쏟아졌다",
     "answerTitle": "스파이더맨: 노 웨이 홈",
@@ -45,7 +45,7 @@
     "improper": false
   },
   {
-    "id": "sample-oppenheimer",
+    "id": "starter-oppenheimer",
     "source": "manual",
     "comment": "머릿속에서 폭발이 먼저 일어나고 화면이 따라온다",
     "answerTitle": "오펜하이머",
@@ -60,7 +60,7 @@
     "improper": false
   },
   {
-    "id": "sample-decision-to-leave",
+    "id": "starter-decision-to-leave",
     "source": "manual",
     "comment": "안개가 걷히면 마음이 더 흐려진다",
     "answerTitle": "헤어질 결심",
@@ -75,7 +75,7 @@
     "improper": false
   },
   {
-    "id": "sample-mad-max-fury-road",
+    "id": "starter-mad-max-fury-road",
     "source": "manual",
     "comment": "모래먼지 속에서 엔진보다 심장이 먼저 뛴다",
     "answerTitle": "매드맥스: 분노의 도로",

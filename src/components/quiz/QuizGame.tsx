@@ -1,7 +1,8 @@
 "use client";
 
-import { HelpCircle, Play, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import Image from "next/image";
+import { Clock3, HelpCircle, Play, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { AnswerInput } from "./AnswerInput";
 import { AnswerReveal } from "./AnswerReveal";
 import { QuizCard } from "./QuizCard";
@@ -20,12 +21,15 @@ const difficulties: Array<{ value: Difficulty; label: string }> = [
   { value: "normal", label: "보통" },
   { value: "hard", label: "어려움" },
 ];
+const timeLimitOptions = [15, 30, 45, 0] as const;
 const emptyItems: QuizItem[] = [];
 
 export function QuizGame({ datasets }: QuizGameProps) {
   const [selectedDatasetId, setSelectedDatasetId] = useState(datasets[0]?.id ?? "");
   const [questionCount, setQuestionCount] = useState<QuestionCount>(5);
   const [difficulty, setDifficulty] = useState<Difficulty>("normal");
+  const [timeLimitSeconds, setTimeLimitSeconds] = useState<(typeof timeLimitOptions)[number]>(30);
+  const [timeLeft, setTimeLeft] = useState(30);
   const [quizItems, setQuizItems] = useState<QuizItem[]>([]);
   const [attempts, setAttempts] = useState<QuizAttempt[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -39,6 +43,33 @@ export function QuizGame({ datasets }: QuizGameProps) {
   const currentItem = quizItems[currentIndex];
   const selectedCountLabel = questionCount === "all" ? "전체" : `${questionCount}문제`;
   const playableCount = useMemo(() => items.filter((item) => item.comment && item.answerTitle).length, [items]);
+  const previewPosters = useMemo(() => items.filter((item) => item.posterUrl).slice(0, 6), [items]);
+
+  useEffect(() => {
+    if (!currentItem || lastResult || timeLimitSeconds === 0) return;
+
+    const timer = window.setTimeout(() => {
+      if (timeLeft <= 1) {
+        const result = matchAnswer("", currentItem.answerTitle, currentItem.aliases);
+        setTimeLeft(0);
+        setLastResult(result);
+        setAttempts((previous) => [
+          ...previous,
+          {
+            item: currentItem,
+            userAnswer: "",
+            correct: false,
+            similarity: result.similarity,
+            matchedTitle: result.matchedTitle,
+          },
+        ]);
+        return;
+      }
+
+      setTimeLeft((seconds) => seconds - 1);
+    }, 1000);
+    return () => window.clearTimeout(timer);
+  }, [currentItem, lastResult, timeLeft, timeLimitSeconds]);
 
   function selectDataset(datasetId: string) {
     setSelectedDatasetId(datasetId);
@@ -48,6 +79,7 @@ export function QuizGame({ datasets }: QuizGameProps) {
     setAnswer("");
     setLastResult(null);
     setFinished(false);
+    setTimeLeft(timeLimitSeconds);
   }
 
   function startGame() {
@@ -58,6 +90,7 @@ export function QuizGame({ datasets }: QuizGameProps) {
     setAnswer("");
     setLastResult(null);
     setFinished(false);
+    setTimeLeft(timeLimitSeconds);
   }
 
   function submitAnswer() {
@@ -86,6 +119,7 @@ export function QuizGame({ datasets }: QuizGameProps) {
     setCurrentIndex((index) => index + 1);
     setAnswer("");
     setLastResult(null);
+    setTimeLeft(timeLimitSeconds);
   }
 
   if (finished) {
@@ -99,8 +133,20 @@ export function QuizGame({ datasets }: QuizGameProps) {
           <p className="eyebrow">
             {selectedDataset?.label ?? "No dataset"} · {playableCount} comments
           </p>
-          <h1 id="app-title">Watcha Doing with My Comments</h1>
+          <h1 id="app-title" className="app-title">
+            <Image className="watcha-logo" src="/brand/watcha-logo.jpg" alt="WATCHA" width={320} height={180} priority />
+            <span>Doing with My Comments</span>
+          </h1>
           <p className="setup-panel__copy">{selectedDataset?.description ?? "내가 쓴 한줄평만 보고 영화를 맞춰보세요."}</p>
+          {previewPosters.length > 0 ? (
+            <div className="poster-preview" aria-hidden="true">
+              {previewPosters.map((item) => (
+                <div className="poster-preview__item" key={item.id}>
+                  <Image src={item.posterUrl ?? ""} alt="" fill sizes="5rem" unoptimized />
+                </div>
+              ))}
+            </div>
+          ) : null}
           <div className="control-grid">
             <label>
               <span className="field-label">
@@ -153,6 +199,19 @@ export function QuizGame({ datasets }: QuizGameProps) {
                 ))}
               </select>
             </label>
+            <label>
+              제한시간
+              <select
+                value={timeLimitSeconds}
+                onChange={(event) => setTimeLimitSeconds(Number(event.target.value) as (typeof timeLimitOptions)[number])}
+              >
+                {timeLimitOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option === 0 ? "없음" : `${option}초`}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
           <button className="primary-action" type="button" onClick={startGame} disabled={playableCount === 0}>
             <Play size={18} /> {selectedCountLabel} 시작
@@ -183,9 +242,17 @@ export function QuizGame({ datasets }: QuizGameProps) {
       <div className="quiz-shell">
         <header className="quiz-header">
           <p className="eyebrow">{difficultyLabel(difficulty)}</p>
-          <strong>
-            {currentIndex + 1} / {quizItems.length}
-          </strong>
+          <div className="quiz-header__status">
+            {timeLimitSeconds > 0 ? (
+              <span className={`timer-badge${timeLeft <= 5 && !lastResult ? " timer-badge--danger" : ""}`}>
+                <Clock3 size={16} />
+                {timeLeft}초
+              </span>
+            ) : null}
+            <strong>
+              {currentIndex + 1} / {quizItems.length}
+            </strong>
+          </div>
         </header>
         <QuizCard item={currentItem} difficulty={difficulty} revealed={Boolean(lastResult)} />
         <AnswerInput value={answer} disabled={Boolean(lastResult)} onChange={setAnswer} onSubmit={submitAnswer} />

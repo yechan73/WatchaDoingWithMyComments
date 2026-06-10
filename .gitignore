@@ -17,6 +17,7 @@ coverage/
 
 # Raw/private data
 data-raw/*.json
+.codex-remote-attachments/
 *.har
 *.cookie
 *.cookies

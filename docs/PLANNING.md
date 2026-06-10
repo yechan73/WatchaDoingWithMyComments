@@ -2,164 +2,179 @@
 
 Last reviewed: 2026-06-10
 
-This document summarizes the remaining work after reading `docs/SWRS.md`,
-`docs/DEVELOPMENT_PLAN.md`, and `docs/DATA_POLICY.md`, then comparing them
-against the current repository.
+이 문서는 현재 앱 상태를 기준으로, 요청된 Watcha Pedia 브랜딩,
+실사용 데이터 흐름, URL 입력 기반 데이터 변환, 포스터 보강, 게임성 개선을
+구현 가능한 순서로 정리한다.
 
 ## Current Snapshot
 
-The repository is beyond the original documentation-only phase. It already has:
+- Next.js App Router 기반 퀴즈 앱이 동작한다.
+- `src/data/users/*.json`의 로컬 정규화 데이터셋을 자동으로 읽어 홈 화면
+  드롭다운에 표시한다.
+- `Yechan comments` 데이터셋이 기본 순서의 첫 번째 데이터셋이다.
+- 기존 예시 데이터셋은 `starter-comments`로 이름을 바꿨다.
+- 홈 화면은 Watcha Pedia 스타일의 브랜드 마크, 포스터 미리보기, 문제 수,
+  난이도, 제한시간 설정을 보여준다.
+- 퀴즈 중 15초, 30초, 45초 또는 제한 없음 모드를 선택할 수 있다.
+- 정답 공개 시 포스터가 있으면 이미지를 보여주고, 없으면 설계된 빈 상태를
+  보여준다.
+- 로컬 정규화 스크립트 `scripts/normalize-watcha-comments.ts`는 JSON 또는
+  명시적으로 지정한 로컬 HTML 파일을 `QuizItem[]`로 변환한다.
 
-- Next.js, TypeScript, TailwindCSS, ESLint, Vitest, and build scripts.
-- A static sample dataset at `src/data/users/sample.json`.
-- A dataset manifest at `src/data/manifest.json`.
-- Dataset files under `src/data/users/` are loaded into the home screen dropdown.
-- The dataset dropdown has an in-app help dialog explaining the local data preparation flow.
-- Dataset loading filters invalid items and reports excluded item counts on the setup screen.
-- Dataset validation now reports concise field-level messages for invalid local JSON files.
-- Core quiz types, quiz session creation, shuffle, rating formatting, and answer matching.
-- Basic quiz UI: setup screen, question card, answer input, reveal, next question, and result screen.
-- Unit tests for quiz generation and answer matching.
-- A local normalization script at `scripts/normalize-watcha-comments.ts`.
-- Raw/private data ignore rules for `data-raw/*.json`, HAR files, cookies, env files, and build outputs.
-- The sample quiz app has been manually checked.
+## Non-Negotiable Constraints
 
-Latest local verification:
+- 앱 런타임에서 Watcha API를 호출하지 않는다.
+- Watcha 로그인 자동화, 쿠키 재사용, 인증 헤더 저장, HAR 커밋, 우회성
+  크롤링을 구현하지 않는다.
+- 다른 사람의 비공개 코멘트 데이터는 명시적 동의 없이 사용하지 않는다.
+- 원본 데이터는 `data-raw/`에만 두고 기본적으로 커밋하지 않는다.
+- 포스터 보강은 로컬 빌드/정규화 단계에서 수행하고, 결과 JSON만 앱에서
+  읽는 구조를 우선한다.
 
-- `npm test` passed: 4 files, 22 tests.
-- `npm run lint` passed.
-- `npm run build` passed with a static `/` route.
+## Request Analysis
 
-## Guiding Constraints
+### 1. Watcha Pedia 로고 적용
 
-- Do not add live Watcha API calls.
-- Do not implement crawling, login, authentication bypass, cookie reuse, or header spoofing.
-- Gameplay must use local normalized JSON datasets.
-- Raw data belongs under `data-raw/` and should not be committed by default.
-- Treat this as a private or limited-sharing MVP until data consent and privacy are rechecked.
+현재 홈 타이틀의 `Watcha` 부분은 Watcha Pedia 스타일의 텍스트 마크로
+분리했다. 정확한 공식 로고 파일을 쓰려면 다음 중 하나가 필요하다.
 
-## Phase Status
-
-| Phase | Status | Notes |
-| --- | --- | --- |
-| Phase 0. Documentation and repo preparation | Mostly done | Docs and ignore rules exist. README is outdated because it still says the repo is in documentation/repo-preparation phase. |
-| Phase 1. Next.js project creation | Done | App builds successfully. |
-| Phase 2. Sample data connection | Done for MVP | Local JSON dataset files are loaded into the home screen dropdown with help and field-level invalid-item handling. |
-| Phase 3. Quiz engine | Done for MVP | Session creation, shuffling, count limiting, and tests exist. |
-| Phase 4. Answer matching | Done for MVP | Normalization, Levenshtein similarity, aliases, and tests exist. More Korean punctuation cases can be added later. |
-| Phase 5. Quiz UI | Mostly done | End-to-end sample quiz flow exists. Sample app behavior has been checked. Accessibility pass remains. |
-| Phase 6. Card flip and results | Partial | Result screen exists. Poster reveal exists. A real flip animation and stronger missing-poster design remain. |
-| Phase 7. Local data normalization script | Done for MVP | Local-only script exists with tests. Manifest integration and real-data dry runs remain. |
-| Phase 8. Deployment preparation | Not started | Needs README update, sensitive-data review, and optional Vercel setup. |
-
-## Remaining Work
-
-### P0. Align Documentation With Reality
-
-Goal: make the docs match the implemented state so future coding agents do not start from a stale assumption.
-
-Tasks:
-
-- Update `README.md` to say the project has a working sample quiz, not only documentation.
-- Update `docs/DEVELOPMENT_PLAN.md` with current phase status or point it to this planning document.
-- Keep `docs/SWRS.md` as the requirements source of truth, but avoid duplicating status in too many files.
+- 사용자가 제공한 로고 파일을 `public/brand/`에 추가한다.
+- 공개 사용이 허용된 공식 브랜드 에셋의 사용 조건을 확인한 뒤 추가한다.
 
 Acceptance:
 
-- A new contributor can read README plus docs and understand what is already implemented.
+- 홈 첫 화면에서 브랜드가 작은 nav 텍스트가 아니라 명확한 첫 시각 신호로
+  보인다.
+- 공식 이미지 파일을 쓰는 경우, 출처와 사용 범위를 README나 별도 문서에
+  기록한다.
 
-### P1. Harden the Local Data Normalization Script
+### 2. 예시 표현 제거
 
-Goal: keep the local normalization path reliable as real personal data is introduced.
-
-Tasks:
-
-- Run the script against a small real local JSON sample under `data-raw/`.
-- Confirm the output dataset works in the quiz UI.
-- Decide whether aliases should stay manual or be supplied by a companion local file.
-- Consider generating or updating `src/data/manifest.json` after normalization.
-- Keep the script local-only. Do not call Watcha or any external URL.
+사용자에게 보이는 데이터셋 이름과 문서의 현황 표현에서 예시 중심 표현을
+제거한다. 테스트/요구사항 문서에 남은 과거 표현은 별도 정리 대상이다.
 
 Acceptance:
 
-- A local JSON file under `data-raw/` can produce a normalized dataset under `src/data/users/`.
-- The generated dataset can be selected and played in the app.
+- 홈 드롭다운의 기본 데이터셋은 `Yechan comments`다.
+- 보조 데이터셋은 `Starter comments`로 표시된다.
+- README와 모바일 QA 문서가 현재 앱 상태를 설명한다.
 
-### P2. Improve Dataset Handling
+### 3. 프로필 URL 또는 코멘트 URL 입력으로 JSON 생성
 
-Goal: support more than one local dataset cleanly.
+완전 자동 수집은 신중하게 나눠야 한다. Watcha Pedia가 로그인 세션 또는
+내부 API 응답을 요구하는 경우, 앱이나 스크립트가 쿠키/인증 헤더를 받아서
+요청하는 방식은 구현하지 않는다.
 
-Tasks:
+허용 가능한 방향:
 
-- Add richer validation errors for nested dataset shape edge cases as they appear.
-- Decide whether `itemCount` should be manually maintained, derived at load time, or updated by a script.
-- Add a small fixture or story for an intentionally invalid dataset during local QA.
+- 사용자가 저장한 로컬 JSON 파일을 정규화한다.
+- 사용자가 저장한 로컬 HTML 파일을 명시적으로 `--input-format html`로
+  정규화한다.
+- URL 입력은 먼저 URL 종류를 판별하고, 필요한 로컬 저장 방법을 안내하는
+  import wizard로 시작한다.
+- 공개 접근 가능한 정적 HTML만 fetch하는 기능은 별도 검토 후 옵션으로 둔다.
 
-Acceptance:
+권장 구현:
 
-- The home screen can select between local datasets when present.
-- Bad data does not crash the whole app.
-
-### P3. Polish Gameplay UX
-
-Goal: make the current sample game feel complete on desktop and mobile.
-
-Tasks:
-
-- Add an actual card flip animation or intentionally simplify the requirement if the current reveal is preferred.
-- Improve the missing-poster state so it feels designed, not like a raw placeholder.
-- Ensure keyboard-only flow works after reveal and next-question actions.
-- Review difficulty behavior:
-  - easy: rating and director,
-  - normal: rating only,
-  - hard: no hints.
-- Consider whether `near` answers should be shown as near-correct or still counted as incorrect for MVP.
-- Manually verify mobile layout, long comments, long movie titles, and no text overlap.
+- `src/app/import/page.tsx`: URL, 파일 업로드, 변환 옵션을 받는 import 화면.
+- `scripts/import-watcha-local.ts`: 로컬 파일 검증, 정규화, manifest 업데이트.
+- `scripts/normalize-watcha-comments.ts`: URL을 직접 호출하지 않는 핵심 변환기 유지.
+- 변환 결과 미리보기: 총 항목 수, 제외된 스포일러/부적절 항목 수, 포스터
+  누락 수, 긴 제목 후보를 보여준다.
 
 Acceptance:
 
-- A 10-question game can be completed comfortably with keyboard and mouse.
-- Missing poster, long text, and mobile views look intentional.
+- 사용자가 코멘트 JSON 또는 저장 HTML을 넣으면 `src/data/users/*.json`이 생성된다.
+- 생성 직후 manifest가 업데이트되어 앱 드롭다운에 표시된다.
+- 쿠키, 인증 헤더, HAR, 세션 토큰을 입력받거나 저장하지 않는다.
 
-### P4. Expand Tests and QA
+### 4. 포스터 이미지 보강
 
-Goal: protect the core game behavior before adding real personal data.
+현재 Watcha Pedia 원본 데이터에 `content.poster`가 있으면 그대로 사용한다.
+누락된 포스터는 TMDB 보강 스크립트를 추가하는 방향이 가장 안전하다.
 
-Tasks:
+TMDB 공식 문서 기준으로 API 사용에는 계정의 API 키 또는 Bearer 토큰이
+필요하고, 영화 검색은 `/3/search/movie`를 사용한다. 이미지 URL은
+`base_url`, `file_size`, `file_path`를 조합해 만든다.
 
-- Add tests for `normalize-watcha-comments`.
-- Add more `normalizeTitle` cases for Korean punctuation, English subtitles, brackets, and whitespace.
-- Add component or interaction tests for answer submission and result rendering.
-- Optionally add Playwright later for a smoke test of the full game flow.
-- Run `npm test`, `npm run lint`, and `npm run build` before merging feature work.
+권장 구현:
 
-Acceptance:
-
-- Core data transformation, answer matching, and quiz progression are covered by tests.
-
-### P5. Prepare for Private Deployment
-
-Goal: make the app safe to run outside the local dev machine.
-
-Tasks:
-
-- Review committed data for private comments, friend data, or anything that needs consent.
-- Confirm there are no cookies, tokens, HAR files, request headers, or `.env` files in Git.
-- Update README with setup, local data preparation, test, build, and deployment instructions.
-- Deploy to Vercel only after the data review is complete.
+- `scripts/enrich-posters-tmdb.ts` 추가.
+- 입력: `src/data/users/*.json`
+- 출력: 같은 JSON에 `posterUrl`, 선택적으로 `aliases`, `tmdbId`를 보강.
+- 환경 변수: `TMDB_READ_ACCESS_TOKEN` 또는 `TMDB_API_KEY`.
+- 검색 파라미터: `query`, `year`, `language=ko-KR`, `include_adult=false`.
+- 캐시: `data-raw/tmdb-cache.json`에 검색 결과를 저장하고 커밋하지 않는다.
+- 충돌 처리: 동일 제목 후보가 여러 개면 자동 선택하지 않고 review 파일을 만든다.
 
 Acceptance:
 
-- Production build succeeds.
-- Deployment uses only bundled normalized JSON data.
-- No live Watcha API collection exists.
+- 포스터가 비어 있는 항목만 보강한다.
+- 기존 Watcha CDN 포스터가 있으면 덮어쓰지 않는다.
+- API 키는 `.env.local`에만 두고 커밋하지 않는다.
+- 보강 후 `npm test`, `npm run lint`, `npm run build`가 통과한다.
 
-## Recommended Next Sprint
+### 5. 게임 느낌 강화
 
-1. Run the normalization script against a small real local dataset.
-2. Confirm the generated dataset appears in the dropdown and plays end to end.
-3. Add a local invalid-dataset QA fixture if repeated manual QA needs it.
-4. Do one accessibility and mobile QA pass on the quiz UI.
+이미 적용된 변경:
 
-This order keeps the project aligned with its main promise: a personal quiz game
-powered by local data, not a Watcha API client.
+- 제한시간 옵션 추가.
+- 제한시간 종료 시 자동 오답 처리.
+- 홈 화면 포스터 미리보기 추가.
+- 정답 공개 포스터 빈 상태 개선.
+
+다음 후보:
+
+- 카드 flip 애니메이션: 문제면은 코멘트, 공개면은 포스터와 정답.
+- 콤보/스트릭: 연속 정답 수와 보너스 점수.
+- 시간 보너스: 남은 시간이 많을수록 추가 점수.
+- 결과 화면 확장: 최고 콤보, 평균 응답 시간, 가장 아까운 오답.
+- 긴 제목 방어: 너무 긴 제목은 공개 영역에서 줄 수와 크기를 안정적으로 제한.
+- 모바일 QA: 360px 폭에서 포스터, 타이머, 입력창이 겹치지 않는지 확인.
+
+Acceptance:
+
+- 5문제 게임이 1분 안에 리듬감 있게 끝난다.
+- 모바일과 데스크톱에서 타이머와 입력창이 겹치지 않는다.
+- 정답 공개 후 다음 문제로 넘어가는 흐름이 키보드로도 자연스럽다.
+
+## Recommended Sprint Order
+
+### P0. 지금 반영한 UI 정리 검증
+
+- 브랜드 마크, 데이터셋 순서, 제한시간, 포스터 미리보기를 빌드로 검증한다.
+- 모바일 폭에서 텍스트 겹침을 확인한다.
+
+### P1. Import Wizard
+
+- `/import` 화면을 만든다.
+- URL 입력은 먼저 분석과 안내까지만 제공한다.
+- 파일 업로드 또는 로컬 파일 경로 기반 변환을 우선 완성한다.
+- 변환 결과를 미리보기하고 manifest 업데이트 여부를 선택하게 한다.
+
+### P2. TMDB Poster Enrichment
+
+- 공식 API 키를 `.env.local`에서 읽는 로컬 스크립트를 만든다.
+- 포스터 누락 항목만 검색한다.
+- 불확실한 매칭은 review JSON으로 분리한다.
+
+### P3. Gameplay Pass
+
+- 카드 flip, 콤보, 시간 보너스, 결과 화면 통계를 추가한다.
+- `near` 판정의 점수 정책을 확정한다.
+- 긴 코멘트/긴 제목/포스터 없음 케이스를 QA한다.
+
+### P4. Documentation And Data Safety
+
+- README에 import wizard와 TMDB 보강 명령을 추가한다.
+- `docs/DATASET_GUIDE.md`에 URL 입력이 실제로 무엇을 하고 무엇을 하지 않는지
+  명확히 적는다.
+- 공개 배포 전 normalized JSON에 개인 정보나 동의 없는 데이터가 없는지 확인한다.
+
+## Open Questions
+
+- 공식 Watcha Pedia 로고 파일을 직접 제공할 수 있는가?
+- URL 입력은 "자동 다운로드"까지 원하는가, 아니면 "URL 분석 후 로컬 파일 변환
+  안내"가 우선인가?
+- TMDB API 키를 사용할 수 있는가?
+- `near` 판정을 정답으로 볼지, 별도 부분 점수로 볼지 결정이 필요하다.

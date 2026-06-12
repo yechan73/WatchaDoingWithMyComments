@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Clock3, HelpCircle, Home, Play, X } from "lucide-react";
+import { CheckCircle2, Clock3, HelpCircle, Home, Play, X, XCircle } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import watchaLogoImage from "../../../public/brand/watcha-logo.png";
 import { AnswerInput } from "./AnswerInput";
@@ -18,6 +18,7 @@ interface QuizGameProps {
 
 const questionCountOptions: QuestionCount[] = [5, 10, 20, "all"];
 const questionTimeLimitSeconds = 30;
+const judgementOverlayDurationMs = 900;
 const emptyItems: QuizItem[] = [];
 
 export function QuizGame({ datasets }: QuizGameProps) {
@@ -28,6 +29,7 @@ export function QuizGame({ datasets }: QuizGameProps) {
   const [attempts, setAttempts] = useState<QuizAttempt[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answer, setAnswer] = useState("");
+  const [judgementResult, setJudgementResult] = useState<AnswerMatchResult | null>(null);
   const [lastResult, setLastResult] = useState<AnswerMatchResult | null>(null);
   const [finished, setFinished] = useState(false);
   const [showDatasetHelp, setShowDatasetHelp] = useState(false);
@@ -45,6 +47,7 @@ export function QuizGame({ datasets }: QuizGameProps) {
     setAttempts([]);
     setCurrentIndex(0);
     setAnswer("");
+    setJudgementResult(null);
     setLastResult(null);
     setFinished(false);
     setTimeLeft(nextTimeLeft);
@@ -67,13 +70,13 @@ export function QuizGame({ datasets }: QuizGameProps) {
   }, [resetGameState]);
 
   useEffect(() => {
-    if (!currentItem || lastResult) return;
+    if (!currentItem || judgementResult || lastResult) return;
 
     const timer = window.setTimeout(() => {
       if (timeLeft <= 1) {
         const result = matchAnswer("", currentItem.answerTitle, currentItem.aliases);
         setTimeLeft(0);
-        setLastResult(result);
+        setJudgementResult(result);
         setAttempts((previous) => [
           ...previous,
           {
@@ -90,7 +93,18 @@ export function QuizGame({ datasets }: QuizGameProps) {
       setTimeLeft((seconds) => seconds - 1);
     }, 1000);
     return () => window.clearTimeout(timer);
-  }, [currentItem, lastResult, timeLeft]);
+  }, [currentItem, judgementResult, lastResult, timeLeft]);
+
+  useEffect(() => {
+    if (!judgementResult) return;
+
+    const timer = window.setTimeout(() => {
+      setLastResult(judgementResult);
+      setJudgementResult(null);
+    }, judgementOverlayDurationMs);
+
+    return () => window.clearTimeout(timer);
+  }, [judgementResult]);
 
   function selectDataset(datasetId: string) {
     setSelectedDatasetId(datasetId);
@@ -98,6 +112,7 @@ export function QuizGame({ datasets }: QuizGameProps) {
     setAttempts([]);
     setCurrentIndex(0);
     setAnswer("");
+    setJudgementResult(null);
     setLastResult(null);
     setFinished(false);
     setTimeLeft(questionTimeLimitSeconds);
@@ -110,6 +125,7 @@ export function QuizGame({ datasets }: QuizGameProps) {
     setAttempts([]);
     setCurrentIndex(0);
     setAnswer("");
+    setJudgementResult(null);
     setLastResult(null);
     setFinished(false);
     setTimeLeft(questionTimeLimitSeconds);
@@ -132,10 +148,10 @@ export function QuizGame({ datasets }: QuizGameProps) {
   }
 
   function submitAnswer() {
-    if (!currentItem || lastResult) return;
+    if (!currentItem || judgementResult || lastResult) return;
 
     const result = matchAnswer(answer, currentItem.answerTitle, currentItem.aliases);
-    setLastResult(result);
+    setJudgementResult(result);
     setAttempts((previous) => [
       ...previous,
       {
@@ -156,6 +172,7 @@ export function QuizGame({ datasets }: QuizGameProps) {
 
     setCurrentIndex((index) => index + 1);
     setAnswer("");
+    setJudgementResult(null);
     setLastResult(null);
     setTimeLeft(questionTimeLimitSeconds);
   }
@@ -251,7 +268,7 @@ export function QuizGame({ datasets }: QuizGameProps) {
             <Home size={16} /> 홈
           </button>
           <div className="quiz-header__status">
-            <span className={`timer-badge${timeLeft <= 5 && !lastResult ? " timer-badge--danger" : ""}`}>
+            <span className={`timer-badge${timeLeft <= 5 && !judgementResult && !lastResult ? " timer-badge--danger" : ""}`}>
               <Clock3 size={16} />
               {timeLeft}초
             </span>
@@ -260,8 +277,11 @@ export function QuizGame({ datasets }: QuizGameProps) {
             </strong>
           </div>
         </header>
-        <QuizCard item={currentItem} elapsedSeconds={questionTimeLimitSeconds - timeLeft} revealed={Boolean(lastResult)} />
-        {!lastResult ? <AnswerInput value={answer} disabled={false} onChange={setAnswer} onSubmit={submitAnswer} /> : null}
+        <div className="quiz-stage">
+          <QuizCard item={currentItem} elapsedSeconds={questionTimeLimitSeconds - timeLeft} revealed={Boolean(lastResult)} />
+          {judgementResult ? <JudgementOverlay result={judgementResult} /> : null}
+        </div>
+        {!judgementResult && !lastResult ? <AnswerInput value={answer} disabled={false} onChange={setAnswer} onSubmit={submitAnswer} /> : null}
         {lastResult ? (
           <AnswerReveal
             item={currentItem}
@@ -272,6 +292,23 @@ export function QuizGame({ datasets }: QuizGameProps) {
         ) : null}
       </div>
     </main>
+  );
+}
+
+function JudgementOverlay({ result }: { result: AnswerMatchResult }) {
+  const correct = result.status === "correct";
+  const near = result.status === "near";
+  const label = correct ? "정답" : near ? "거의 정답" : "오답";
+  const detail = correct ? "좋아요, 바로 공개합니다" : near ? "아슬아슬했어요" : "정답을 확인해볼게요";
+
+  return (
+    <div className={`judgement-overlay judgement-overlay--${correct ? "correct" : near ? "near" : "incorrect"}`} role="status" aria-live="polite">
+      <div className="judgement-overlay__panel">
+        <span className="judgement-overlay__icon">{correct || near ? <CheckCircle2 size={44} /> : <XCircle size={44} />}</span>
+        <strong>{label}</strong>
+        <span>{detail}</span>
+      </div>
+    </div>
   );
 }
 

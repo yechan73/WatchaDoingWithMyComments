@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { QuizGame } from "@/components/quiz/QuizGame";
 import type { QuizDataset, QuizItem } from "@/features/quiz/quiz-types";
@@ -17,6 +17,7 @@ vi.mock("next/image", () => ({
 
 afterEach(() => {
   cleanup();
+  vi.useRealTimers();
   vi.restoreAllMocks();
 });
 
@@ -37,16 +38,22 @@ describe("QuizGame browser history", () => {
     expect(screen.queryByText("1 / 5")).toBeNull();
   });
 
-  it("removes the answer input after an answer is submitted", async () => {
+  it("shows a judgement overlay before the answer reveal", async () => {
+    vi.useFakeTimers();
     render(<QuizGame datasets={[makeDataset()]} />);
 
     fireEvent.click(screen.getByRole("button", { name: /시작/ }));
     fireEvent.change(screen.getByLabelText("영화 제목"), { target: { value: "submitted answer" } });
     fireEvent.click(screen.getByRole("button", { name: "정답 제출" }));
 
-    await waitFor(() => {
-      expect(screen.queryByLabelText("영화 제목")).toBeNull();
+    expect(screen.queryByLabelText("영화 제목")).toBeNull();
+    expect(screen.getByText("오답")).toBeTruthy();
+    expect(screen.queryByRole("button", { name: "다음 문제" })).toBeNull();
+
+    await act(async () => {
+      vi.advanceTimersByTime(900);
     });
+
     expect(screen.getByRole("button", { name: "다음 문제" })).toBeTruthy();
   });
 });

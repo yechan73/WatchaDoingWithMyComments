@@ -18,13 +18,15 @@ afterEach(() => {
 });
 
 describe("QuizCard hint timing", () => {
-  it("does not show hints before 10 seconds", () => {
+  it("shows hint labels and placeholder values before 10 seconds", () => {
     render(<QuizCard item={item} elapsedSeconds={9} revealed={false} />);
 
-    expect(screen.queryByText("내 평점")).toBeNull();
-    expect(screen.queryByText("감독")).toBeNull();
-    expect(screen.queryByText("개봉년도")).toBeNull();
-    expect(screen.queryByText("제목 초성")).toBeNull();
+    expect(screen.getByText("내 평점")).toBeTruthy();
+    expect(screen.getByText("감독")).toBeTruthy();
+    expect(screen.getByText("개봉년도")).toBeTruthy();
+    expect(screen.getByText("제목 초성")).toBeTruthy();
+    expect(screen.getByText("? / 5.0")).toBeTruthy();
+    expect(screen.getAllByText("?")).toHaveLength(3);
   });
 
   it("shows rating, director, and release year after 10 seconds", () => {
@@ -36,7 +38,8 @@ describe("QuizCard hint timing", () => {
     expect(screen.getByText("개봉년도")).toBeTruthy();
     expect(screen.getByText("Test Director")).toBeTruthy();
     expect(screen.getByText("2024")).toBeTruthy();
-    expect(screen.queryByText("제목 초성")).toBeNull();
+    expect(screen.getByText("제목 초성")).toBeTruthy();
+    expect(screen.getByText("?")).toBeTruthy();
   });
 
   it("shows title initials after 20 seconds", () => {

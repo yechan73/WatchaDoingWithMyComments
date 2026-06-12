@@ -22,7 +22,7 @@ export function QuizCard({ item, elapsedSeconds, revealed }: QuizCardProps) {
               <p className="quiz-card__quote">{item.comment}</p>
             </div>
             <dl className="quiz-card__hints" aria-label="힌트">
-              <HintItem label="내 평점" visible={showDetails}>
+              <HintItem label="내 평점" visible={showDetails} placeholder="? / 5.0">
                 {formatRatingStars(item.ratingStars)}
               </HintItem>
               <HintItem label="감독" visible={showDetails}>
@@ -46,11 +46,18 @@ export function QuizCard({ item, elapsedSeconds, revealed }: QuizCardProps) {
   );
 }
 
-function HintItem({ label, visible, children }: { label: string; visible: boolean; children: ReactNode }) {
+function HintItem({ label, visible, placeholder = "?", children }: { label: string; visible: boolean; placeholder?: string; children: ReactNode }) {
   return (
-    <div className={visible ? "quiz-card__hint" : "quiz-card__hint quiz-card__hint--hidden"} aria-hidden={!visible}>
-      <dt>{visible ? label : "\u00a0"}</dt>
-      <dd>{visible ? children : "\u00a0"}</dd>
+    <div className={visible ? "quiz-card__hint quiz-card__hint--revealed" : "quiz-card__hint"}>
+      <dt>{label}</dt>
+      <dd>
+        <span
+          key={visible ? "revealed" : "locked"}
+          className={visible ? "quiz-card__hint-value quiz-card__hint-value--revealed" : "quiz-card__hint-value quiz-card__hint-value--locked"}
+        >
+          {visible ? children : placeholder}
+        </span>
+      </dd>
     </div>
   );
 }

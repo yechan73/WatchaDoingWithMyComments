@@ -16,7 +16,7 @@ export function AnswerReveal({ item, result, onNext, isLastQuestion }: AnswerRev
   return (
     <section className={`answer-reveal answer-reveal--${correct ? "correct" : "incorrect"}`}>
       <div className="answer-reveal__status">
-        {correct ? <CheckCircle2 size={22} /> : <XCircle size={22} />}
+        <span className="answer-reveal__status-icon">{correct ? <CheckCircle2 size={22} /> : <XCircle size={22} />}</span>
         <strong>{correct ? "정답" : result.status === "near" ? "거의 정답" : "오답"}</strong>
       </div>
       <h2>

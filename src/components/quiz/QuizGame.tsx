@@ -261,7 +261,7 @@ export function QuizGame({ datasets }: QuizGameProps) {
           </div>
         </header>
         <QuizCard item={currentItem} elapsedSeconds={questionTimeLimitSeconds - timeLeft} revealed={Boolean(lastResult)} />
-        <AnswerInput value={answer} disabled={Boolean(lastResult)} onChange={setAnswer} onSubmit={submitAnswer} />
+        {!lastResult ? <AnswerInput value={answer} disabled={false} onChange={setAnswer} onSubmit={submitAnswer} /> : null}
         {lastResult ? (
           <AnswerReveal
             item={currentItem}

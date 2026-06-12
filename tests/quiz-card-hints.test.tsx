@@ -24,25 +24,33 @@ describe("QuizCard hint timing", () => {
     expect(screen.queryByText("내 평점")).toBeNull();
     expect(screen.queryByText("감독")).toBeNull();
     expect(screen.queryByText("개봉년도")).toBeNull();
+    expect(screen.queryByText("제목 초성")).toBeNull();
   });
 
-  it("shows rating after 10 seconds", () => {
+  it("shows rating, director, and release year after 10 seconds", () => {
     render(<QuizCard item={item} elapsedSeconds={10} revealed={false} />);
 
     expect(screen.getByText("내 평점")).toBeTruthy();
     expect(screen.getByText("4.0 / 5.0")).toBeTruthy();
-    expect(screen.queryByText("감독")).toBeNull();
-    expect(screen.queryByText("개봉년도")).toBeNull();
-  });
-
-  it("shows director and release year after 20 seconds", () => {
-    render(<QuizCard item={item} elapsedSeconds={20} revealed={false} />);
-
-    expect(screen.getByText("내 평점")).toBeTruthy();
     expect(screen.getByText("감독")).toBeTruthy();
     expect(screen.getByText("개봉년도")).toBeTruthy();
     expect(screen.getByText("Test Director")).toBeTruthy();
     expect(screen.getByText("2024")).toBeTruthy();
+    expect(screen.queryByText("제목 초성")).toBeNull();
+  });
+
+  it("shows title initials after 20 seconds", () => {
+    render(<QuizCard item={item} elapsedSeconds={20} revealed={false} />);
+
+    expect(screen.getByText("제목 초성")).toBeTruthy();
+    expect(screen.getByText("ㅌㅅㅌ ㅁㅂ")).toBeTruthy();
+  });
+
+  it("shows comments without wrapping quotation marks", () => {
+    render(<QuizCard item={item} elapsedSeconds={0} revealed={false} />);
+
+    expect(screen.getByText("Test comment")).toBeTruthy();
+    expect(screen.queryByText("“Test comment”")).toBeNull();
   });
 });
 
@@ -50,7 +58,7 @@ const item: QuizItem = {
   id: "test-item",
   source: "manual",
   comment: "Test comment",
-  answerTitle: "Test Movie",
+  answerTitle: "테스트 무비",
   aliases: [],
   year: 2024,
   posterUrl: null,

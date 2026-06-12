@@ -36,6 +36,19 @@ describe("QuizGame browser history", () => {
     });
     expect(screen.queryByText("1 / 5")).toBeNull();
   });
+
+  it("removes the answer input after an answer is submitted", async () => {
+    render(<QuizGame datasets={[makeDataset()]} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /시작/ }));
+    fireEvent.change(screen.getByLabelText("영화 제목"), { target: { value: "submitted answer" } });
+    fireEvent.click(screen.getByRole("button", { name: "정답 제출" }));
+
+    await waitFor(() => {
+      expect(screen.queryByLabelText("영화 제목")).toBeNull();
+    });
+    expect(screen.getByRole("button", { name: "다음 문제" })).toBeTruthy();
+  });
 });
 
 function makeDataset(): QuizDataset {
